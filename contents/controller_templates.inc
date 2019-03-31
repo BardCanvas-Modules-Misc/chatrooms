@@ -85,6 +85,8 @@
     <div class="chat_user_reported"><?= $this_module->language->messages->user_reported ?></div>
     <div class="chat_disabled"><?= $this_module->language->messages->chat_disabled ?></div>
     
+    <template class="welcome_banner"><?= unindent($this_module->language->welcome_banner) ?></template>
+    
     <template class="chat_body">
         
         <div class="messages"></div>

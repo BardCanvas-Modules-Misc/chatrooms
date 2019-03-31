@@ -45,6 +45,11 @@
         </options>
     </ban_dialog>
     
+    <welcome_banner><![CDATA[
+        Welcome to {{chat}}! There currently are {{count}} users to interact with: {{users}}.
+        Please be nice and enjoy the conversation!
+    ]]></welcome_banner>
+    
     <messages>
         <cannot_create_images_directory>Cannot create images directory! The data directory isn't writable. Please notify the tech support staff.</cannot_create_images_directory>
         <cannot_create_directory>Cannot create container {$dir} in images directory! Please inform the tech support staff.</cannot_create_directory>

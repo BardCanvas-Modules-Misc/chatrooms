@@ -133,6 +133,20 @@ var chatroom = {
         $container.scrollTo('max');
     },
     
+    __addBanner: function(text)
+    {
+        var $container = chatroom.$container.find('.target .messages');
+        
+        $container.append(
+            '<div class="framed_content state_ok aligncenter">' +
+            '<i class="fa fa-info-circle"></i> ' + text +
+            '</div>'
+        );
+        
+        ion.sound.play("pop_cork");
+        $container.scrollTo('max');
+    },
+    
     init: function($container, $messages)
     {
         chatroom.$container          = $container;
@@ -389,6 +403,15 @@ var chatroom = {
             $container.find('.empty-chat').fadeOut('fast', function() { $(this).remove(); });
         
         for(var i in response.data) $container.append(chatroom.__forgeMessageMarkup(response.data[i], $container));
+        
+        if( typeof response.meta.active_users === 'object' )
+        {
+            chatroom.__addBanner(chatroom.__getTemplate('welcome_banner', {
+                chat:  chatroom.params.chat,
+                count: response.meta.active_users.length,
+                users: response.meta.active_users.join(', ')
+            }));
+        }
         
         if( response.meta.last_message_timestamp !== '' )
             chatroom.params.since = response.meta.last_message_timestamp;

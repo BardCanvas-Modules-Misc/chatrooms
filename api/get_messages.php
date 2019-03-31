@@ -78,6 +78,8 @@ $since = empty($_GET["since"]) ? date("Y-m-d H:i:s", strtotime("now - 24 hours")
 $filter = array("chat_name = '{$_GET["chat"]}'", "sent > '$since'");
 $rows   = $repository->find($filter, 0, 0, "sent desc");
 
+$active_users = array();
+
 $lts = "";
 if( ! empty($rows) )
 {
@@ -86,10 +88,11 @@ if( ! empty($rows) )
     $rows = array_reverse($rows);
     reset($rows);
     
-    $aids  = array();
+    $aids = array();
     foreach($rows as $row) $aids[] = $row->id_sender;
     reset($rows);
     
+    # Banned users flagging
     $arepo = new accounts_repository();
     $prefs = $arepo->get_multiple_engine_prefs($aids, "@chatrooms:{$_GET["chat"]}.banned_until");
     if( ! empty($prefs) )
@@ -102,12 +105,26 @@ if( ! empty($rows) )
             $row->_sender_is_banned = true;
         }
     }
+    
+    # Greeting with chatting users list
+    if( empty($_GET["since"]) )
+    {
+        $boundary = date("Y-m-d H:i:s", strtotime("now - 5 minutes"));
+        
+        foreach($rows as $row)
+            if( $row->sent >= $boundary && ! $row->_sender_is_banned && $row->id_sender != $account->id_account )
+                $active_users[] = "<a class='user_display_name' data-user-level='{$row->sender_level}'
+                                      href='{$config->full_root_path}/user/{$row->sender_user_name}'><i 
+                                      class='fa fa-user fa-fw'></i>{$row->sender_display_name}</a>";
+    }
 }
 
 $meta = (object) array(
     "since"                  => $_GET["since"],
     "last_message_timestamp" => $lts,
 );
+
+if( empty($_GET["since"]) && ! empty($active_users) ) $meta->active_users = $active_users;
 
 if( $account->level >= $config::MODERATOR_USER_LEVEL )
 {
