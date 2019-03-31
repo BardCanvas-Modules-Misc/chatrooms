@@ -40,8 +40,9 @@ if( count($chatrooms) == 1 )
     $template->add_menu_item(
         trim($this_module->language->single->menu),
         "
-        <a class='main_menu_item' data-module='chatrooms' href='{$config->full_root_path}/chatroom/{$chat_slug}'>
-            <span class='fa {$this_module->language->icon}'></span>
+        <a class='main_menu_item' data-module='chatrooms' href='{$config->full_root_path}/chatroom/{$chat_slug}'
+           data-priority='800' target='_blank'>
+            <span class='fa fa-window-maximize fa-fw'></span>
             {$this_module->language->single->menu}
         </a>
         ",
@@ -56,8 +57,8 @@ else
         trim($this_module->language->menu_caption),
         "
         <span class='main_menu_item is_submenu_trigger' data-module='chatrooms' data-submenu='#chatrooms_menu_list'
-              style='cursor: pointer'>
-            <span class='fa {$this_module->language->icon}'></span>
+              data-priority='800' style='cursor: pointer'>
+            <span class='fa {$this_module->language->icon} fa-fw'></span>
             {$this_module->language->menu_caption}
         </span>
         ",
