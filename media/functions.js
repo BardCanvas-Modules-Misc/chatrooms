@@ -119,6 +119,20 @@ var chatroom = {
         $container.scrollTo('max');
     },
     
+    __addInfo: function(text)
+    {
+        var $container = chatroom.$container.find('.target .messages');
+        
+        $container.append(
+            '<div class="framed_content state_highlight aligncenter">' +
+            '<i class="fa fa-info-circle"></i> ' + text +
+            '</div>'
+        );
+        
+        ion.sound.play("pop_cork");
+        $container.scrollTo('max');
+    },
+    
     init: function($container, $messages)
     {
         chatroom.$container          = $container;
