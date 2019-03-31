@@ -16,6 +16,11 @@
         <document_handler>extenders/document_handler.inc</document_handler>
     </php_includes>
     
+    <template_includes>
+        <header_menu>header_menu.inc</header_menu>
+        <post_footer>post_footer.inc</post_footer>
+    </template_includes>
+    
     <extends_to>
         <posts>
             <posts_by_category_index>

@@ -11,7 +11,14 @@
         Salones de chat para BardCanvas
     </description>
     
+    <menu_caption>Chats</menu_caption>
+    
     <input_placeholder>Escribe mensaje y oprime RETORNO</input_placeholder>
+    
+    <single>
+        <title>Chatroom: {$title}</title>
+        <menu>Chat</menu>
+    </single>
     
     <view_profile>Ver perfil</view_profile>
     <report>Reportar con los moderadores...</report>
@@ -169,6 +176,16 @@
                 Puedes desactivar temporalmente cualquier salón añadiendo al inicio de su línea un símbolo <code>#</code>.
             ]]></description>
             <type>code</type>
+        </specs>
+        
+        <specs key="show_in_menu_bar">
+            <title>Mostrar menú de chats?</title>
+            <description><![CDATA[
+                Al activarse, una entrada inteligente se añadirá a la barra de menú.<br>
+                Si sólo un chat está disponible para el usuario, se mostrará como un vínculo.<br>
+                Si hay más chats disponibles para el usuario, se mostrarán como un submenú.
+            ]]></description>
+            <type>yes/no</type>
         </specs>
         
     </settings_data>

@@ -11,8 +11,11 @@
         Chatrooms for BardCanvas
     </description>
     
+    <menu_caption>Chatrooms</menu_caption>
+    
     <single>
         <title>Chatroom: {$title}</title>
+        <menu>Chatroom</menu>
     </single>
     
     <input_placeholder>Type a message and hit ENTER</input_placeholder>
@@ -178,6 +181,16 @@
                 You can temporarily disable any room from the page by prepending its line with a <code>#</code>.
             ]]></description>
             <type>code</type>
+        </specs>
+        
+        <specs key="show_in_menu_bar">
+            <title>Show chats menu?</title>
+            <description><![CDATA[
+                If enabled, an smart menu entry will be added to the menu bar.<br>
+                If only one chat is available for the user, it will be shown as a link.<br>
+                If more chats are available for the user, they will be shown as a submenu.
+            ]]></description>
+            <type>yes/no</type>
         </specs>
         
     </settings_data>
