@@ -42,6 +42,11 @@ body[data-chatroom-name] #content { padding: 0; overflow: hidden; }
     text-overflow: ellipsis;
 }
 
+.chatroom .chat_title .user_display_name {
+    font-weight: bold;
+    color: aquamarine;
+}
+
 .chatroom .chat_title .detach_icon {
     color: white;
     float: right;
