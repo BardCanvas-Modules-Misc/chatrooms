@@ -145,13 +145,70 @@ var chatroom = {
         var params = $container.attr('data-params');
         if( params ) chatroom.params = JSON.parse(params);
         
-        chatroom.start();
+        chatroom.__init_helpers();
         
         ion.sound({
             sounds: [{name: "pop_cork"}, {name: 'computer_error'}],
             volume:  1,
             path:    $_FULL_ROOT_PATH + "/lib/ion.sound-3.0.7/sounds/",
             preload: true
+        });
+        
+        $(document).keyup(function(e)
+        {
+            if( ! $('body').hasClass('popup') ) return;
+            
+            if( e.key === "Escape" ) hide_dropdown_menus();
+        });
+        
+        chatroom.start();
+    },
+    
+    __init_helpers: function()
+    {
+        $('#chatroom_ban_form').ajaxForm({
+            target: '#chatroom_ban_target',
+            beforeSubmit: function(formData, $form, options)
+            {
+                $form.closest('.ui-dialog').block(blockUI_medium_params);
+            },
+            success: function(responseText, statusText, xhr, $form)
+            {
+                if( responseText !== 'OK' )
+                {
+                    $form.closest('.ui-dialog').unblock();
+                    alert(responseText);
+                    
+                    return;
+                }
+                
+                $('#chatroom_ban_dialog').dialog('close');
+            }
+        });
+        
+        var height = $(window).height() - 20;
+        if( height > 400 ) height = 380;
+        
+        var width = $(window).width() - 20;
+        if( width > 340 ) width = 320;
+        
+        var $dialog = $('#chatroom_ban_dialog');
+        $dialog.dialog({
+            autoOpen: false,
+            modal: true,
+            width: width,
+            height: height,
+            buttons: [
+                {
+                    text:  $dialog.attr('data-ok-caption'),
+                    icons: { primary: "ui-icon-check" },
+                    click: function() { $('#chatroom_ban_form').submit(); }
+                }, {
+                    text:  $dialog.attr('data-cancel-caption'),
+                    icons: { primary: "ui-icon-cancel" },
+                    click: function() { $(this).dialog('close'); }
+                }
+            ]
         });
     },
     
@@ -309,28 +366,36 @@ var chatroom = {
             return;
         }
         
+        if( typeof response.meta.warns === "object" )
+        {
+            for(var w in response.meta.warns)
+                chatroom.__addWarning(response.meta.warns[w]);
+                
+            if( response.meta.suspend_ops )
+            {
+                chatroom.stop();
+                chatroom.$container.find('.input textarea')
+                        .prop('disabled', true)
+                        .attr('placeholder', chatroom.__getMessage('chat_disabled', true));
+                chatroom.$container.find('.input .buttons .fa')
+                        .addClass('disabled')
+                        .attr('onclick', null);
+                
+                return;
+            }
+        }
+        
         if( response.data.length > 0 )
             $container.find('.empty-chat').fadeOut('fast', function() { $(this).remove(); });
         
-        for(var i in response.data)
-        {
-            var item               = response.data[i];
-            var time               = new Date(item.sent);
-            item.time              = sprintf('%02f', time.getHours()) + ':' + sprintf('%02f', time.getMinutes());
-            item.class             = item.id_sender === chatroom.__accountId ? 'outgoing' : 'incoming';
-            item.message           = item.contents;
-            
-            var $item = $( chatroom.__getTemplate('chat_message', item) );
-            $item.find('img').load(function() { $container.scrollTo('max'); });
-            
-            $container.append( $item );
-        }
+        for(var i in response.data) $container.append(chatroom.__forgeMessageMarkup(response.data[i], $container));
         
         if( response.meta.last_message_timestamp !== '' )
             chatroom.params.since = response.meta.last_message_timestamp;
         
         if( response.data.length > 0 ) ion.sound.play("pop_cork");
         if( response.data.length > 0 ) $container.scrollTo('max');
+        if( response.data.length > 0 ) prepare_submenus();
         chatroom.__firstRun = false;
     },
     
@@ -369,6 +434,34 @@ var chatroom = {
         }
         
         return true;
+    },
+    
+    /**
+     * @private
+     * @param {{object}} item
+     * @param {{jQuery}} $container
+     * 
+     * @return {{jQuery}}
+     */
+    __forgeMessageMarkup: function(item, $container)
+    {
+        var time              = new Date(item.sent);
+        item.time             = sprintf('%02f', time.getHours()) + ':' + sprintf('%02f', time.getMinutes());
+        item.class            = item.id_sender === chatroom.__accountId ? 'outgoing' : 'incoming';
+        item.message          = item.contents;
+        item.show_mod_actions = ($_CURRENT_USER_IS_MOD && parseInt(item.sender_level) < 200);
+        
+        if( parseInt(item.id_sender) === 0 )
+            return $(
+                '<div class="framed_content state_highlight aligncenter">' +
+                '<i class="fa fa-info-circle"></i> ' + '[' + item.time + '] ' + item.contents +
+                '</div>'
+            );
+        
+        var $item = $( chatroom.__getTemplate('chat_message', item) );
+        $item.find('img').load(function() { $container.scrollTo('max'); });
+        
+        return $item;
     },
     
     runFailed: function($xhr, textStatus, errorThrown)
@@ -506,7 +599,106 @@ var chatroom = {
         $form[0].reset();
         $chat.val( chatroom.params.chat );
         $input.click();
-    }
+    },
+    
+    __prepareActionsMenu: function(trigger)
+    {
+        var $trigger      = $(trigger);
+        var $author       = $trigger.closest('.message').find('.author');
+        var author_id     = $author.attr('data-user-id');
+        var author_lvl    = parseInt($author.attr('data-user-level'));
+        var author_uname  = $author.attr('data-user-name');
+        var author_banned = $author.attr('data-is-banned') === 'true';
+        
+        var $submenu = $( $trigger.attr('data-submenu') );
+        $submenu.attr('data-user-id',    author_id);
+        $submenu.attr('data-user-level', author_lvl);
+        $submenu.attr('data-user-name',  author_uname);
+        $submenu.find('.action').show();
+        
+        if( $_CURRENT_USER_IS_MOD )
+        {
+            $submenu.find('.action[data-action="report"]').hide();
+            
+            if( author_lvl >= 200 || author_banned )
+            {
+                $submenu.find('.action[data-action="kick"]').hide();
+                $submenu.find('.action[data-action="open_ban_dialog"]').hide();
+            }
+            
+            if( ! author_banned ) $submenu.find('.action[data-action="unban"]').hide();
+        }
+        else
+        {
+            if( author_lvl >= 200 || author_banned )
+                $submenu.find('.action[data-action="report"]').hide();
+            
+            $submenu.find('.action[data-action="kick"]').hide();
+            $submenu.find('.action[data-action="open_ban_dialog"]').hide();
+            $submenu.find('.action[data-action="unban"]').hide();
+        }
+    },
+    
+    __execAction: function(trigger)
+    {
+        var $trigger     = $(trigger);
+        var action       = $trigger.attr('data-action');
+        var $submenu     = $trigger.closest('.dropdown_menu');
+        var author_id    = $submenu.attr('data-user-id');
+        var author_lvl   = $submenu.attr('data-user-level');
+        var author_uname = $submenu.attr('data-user-name');
+        
+        if( action === 'view_profile' )
+        {
+            window.open($_FULL_ROOT_PATH + '/user/' + author_uname);
+            
+            return;            
+        }
+        
+        if( action === 'open_ban_dialog' )
+        {
+            var $form = $('#chatroom_ban_form');
+            $form[0].reset();
+            $form.find('input[name="chat"]').val( chatroom.params.chat );
+            $form.find('input[name="user_id"]').val( author_id );
+            $form.find('label.state_active').removeClass('state_active');
+            $('#chatroom_ban_dialog').dialog('open');
+            
+            return;
+        }
+        
+        if( action === 'unban' )
+        {
+            if( ! confirm($_GENERIC_CONFIRMATION) ) return;
+        }
+        else
+        {
+            var message = chatroom.__getMessage( action === 'kick' ? 'chat_kick_prompt' : 'chat_report_prompt' );
+            var reason  = prompt(message);
+            if( ! reason ) return;
+        }
+        
+        var params = {
+            action:  action,
+            chat:    chatroom.params.chat,
+            user_id: author_id,
+            reason:  reason
+        };
+        $.blockUI(blockUI_default_params);
+        $.post($_CHATROOM_TOOLBOX, params, function(response)
+        {
+            $.unblockUI();
+            if( response !== 'OK' )
+            {
+                chatroom.__addWarning(response);
+                
+                return;
+            }
+            
+            if( action === 'report' )
+                chatroom.__addInfo( chatroom.__getMessage('chat_user_reported') );
+        });
+    },
 };
 
 $(document).ready(function() { chatroom.init( $('#chatroom'), $('#chatroom_messages') ); });

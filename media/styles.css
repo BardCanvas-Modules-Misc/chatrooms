@@ -228,3 +228,6 @@ body[data-chatroom-name] .chatroom .target {
     border-right: 0;
     border-top: 0;
 }
+
+.chatroom .target .messages .chat-message.outgoing .is_submenu_trigger { display: none; }
+#chatroom_actions_menu .main_menu_item { cursor: pointer; }

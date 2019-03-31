@@ -21,6 +21,7 @@
  *                }
  */
 
+use hng2_base\accounts_repository;
 use hng2_modules\chatrooms\chatroom_messages_repository;
 
 include "../../config.php";
@@ -48,6 +49,31 @@ if( $account->level < $chat->min_level )
 if( ! empty($_GET["since"]) && ! strtotime($_GET["since"]) )
     die(json_encode(array("message" => trim($current_module->language->messages->invalid_timestamp))));
 
+$banned_until = $account->engine_prefs["@chatrooms:{$_GET["chat"]}.banned_until"];
+if( ! empty($banned_until) )
+{
+    if( date("Y-m-d H:i:s") >= $banned_until )
+    {
+        $account->set_engine_pref("@chatrooms:{$_GET["chat"]}.banned_until", "");
+    }
+    else
+    {
+        die(json_encode(array(
+            "message" => "OK",
+            "data"    => array(),
+            "meta"    => array(
+                "since"                  => $_GET["since"],
+                "last_message_timestamp" => "",
+                "warns"                  => array(replace_escaped_objects(
+                    $current_module->language->messages->banned_until,
+                    array('{$time}' => current(explode(" ", time_remaining_string($banned_until))))
+                )),
+                "suspend_ops" => true,
+            )
+        )));
+    }
+}
+
 $since = empty($_GET["since"]) ? date("Y-m-d H:i:s", strtotime("now - 24 hours")) : $_GET["since"];
 $filter = array("chat_name = '{$_GET["chat"]}'", "sent > '$since'");
 $rows   = $repository->find($filter, 0, 0, "sent desc");
@@ -58,12 +84,44 @@ if( ! empty($rows) )
     $row = current($rows);
     $lts = $row->sent;
     $rows = array_reverse($rows);
+    reset($rows);
+    
+    $aids  = array();
+    foreach($rows as $row) $aids[] = $row->id_sender;
+    reset($rows);
+    
+    $arepo = new accounts_repository();
+    $prefs = $arepo->get_multiple_engine_prefs($aids, "@chatrooms:{$_GET["chat"]}.banned_until");
+    if( ! empty($prefs) )
+    {
+        foreach($rows as &$row)
+        {
+            if( empty($prefs[$row->id_sender]) ) continue;
+            if( date("Y-m-d H:i:s") > $prefs[$row->id_sender] ) continue;
+            
+            $row->_sender_is_banned = true;
+        }
+    }
 }
 
 $meta = (object) array(
     "since"                  => $_GET["since"],
     "last_message_timestamp" => $lts,
-    "query"                  => $database->get_last_query(),
 );
+
+if( $account->level >= $config::MODERATOR_USER_LEVEL )
+{
+    $warns = array();
+    foreach($account->engine_prefs as $key => $val)
+    {
+        if( ! stristr($key, "@chatrooms:{$_GET["chat"]}.report/") ) continue;
+        if( empty($val) ) continue;
+        
+        $warns[] = $val;
+        $account->set_engine_pref($key, "");
+    }
+    
+    if( count($warns) > 0 ) $meta->warns = $warns;
+}
 
 die(json_encode(array("message" => "OK", "data" => $rows, "meta" => $meta)));

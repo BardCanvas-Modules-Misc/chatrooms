@@ -25,6 +25,17 @@ if( $account->level < $config::NEWCOMER_USER_LEVEL || $account->state != "enable
 
 if( empty($_POST["chat"]) ) die( $current_module->language->messages->chat_name_missing );
 
+$banned_until = $account->engine_prefs["@chatrooms:{$_POST["chat"]}.banned_until"];
+if( ! empty($banned_until) )
+{
+    if( date("Y-m-d H:i:s") >= $banned_until )
+        $account->set_engine_pref("@chatrooms:{$_POST["chat"]}.banned_until", "");
+    else
+        die(json_encode(array("message" => replace_escaped_objects($current_module->language->messages->banned_until,
+            array('{$time}' => current(explode(" ", time_remaining_string($banned_until))))
+        ))));
+}
+
 if( empty($_FILES["image"]) )
     die( $current_module->language->messages->no_image_uploaded );
 

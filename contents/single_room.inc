@@ -23,8 +23,9 @@ $this_module = $current_module;
 <link rel="stylesheet" type="text/css" href="<?= $this_module->get_url() ?>/media/styles~v<?= time() ?>.css">
 
 <script type="text/javascript">
-    $_CHATROOM_SCRIPT = '<?= $this_module->get_url() ?>/api/get_messages.php';
-    $_CHATROOM_SENDER = '<?= $this_module->get_url() ?>/api/post_message.php';
+    $_CHATROOM_SCRIPT  = '<?= $this_module->get_url() ?>/api/get_messages.php';
+    $_CHATROOM_SENDER  = '<?= $this_module->get_url() ?>/api/post_message.php';
+    $_CHATROOM_TOOLBOX = '<?= $this_module->get_url() ?>/api/toolbox.php';
 </script>
 <script type="text/javascript" src="<?= $this_module->get_url() ?>/media/functions~v<?= time() ?>.js"></script>
 

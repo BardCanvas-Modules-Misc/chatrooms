@@ -13,6 +13,34 @@
     
     <input_placeholder>Escribe mensaje y oprime RETORNO</input_placeholder>
     
+    <view_profile>Ver perfil</view_profile>
+    <report>Reportar con los moderadores...</report>
+    <kick>Patear por 10 minutos...</kick>
+    <ban>Banear del chat...</ban>
+    <unban>Restaurar acceso</unban>
+    
+    <report_prompt>Por favor provee una razón para tu reporte:</report_prompt>
+    <kick_prompt>Introduce una razón para el pateo:</kick_prompt>
+    <ban_dialog>
+        <title>Banear usuario del salón</title>
+        <info>Introduce una razón para el baneo:</info>
+        <select>Selecciona el tiempo de baneo:</select>
+        <options>
+            <option value="1">1 hora</option>
+            <option value="2">2 horas</option>
+            <option value="3">3 horas</option>
+            <option value="6">6 horas</option>
+            <option value="12">12 horas</option>
+            <option value="24">24 horas</option>
+            <option value="48">Dos días</option>
+            <option value="72">Tres días</option>
+            <option value="168">Una semana</option>
+            <option value="336">Dos semanas</option>
+            <option value="720">Un mes</option>
+            <option value="999">Permanente</option>
+        </options>
+    </ban_dialog>
+    
     <messages>
         <cannot_create_images_directory>¡No se puede crear el directorio de imágenes! El directorio de datos no es escribible. Por favor informa al personal de soporte.</cannot_create_images_directory>
         <cannot_create_directory>¡No se puede crear el contenedor {$dir} en el directorio de imágenes! Por favor informa al personal de soporte.</cannot_create_directory>
@@ -36,6 +64,66 @@
         <more_information>Más información</more_information>
         <for_members_only>Lo sentimos, pero este chat es sólo para usuarios registrados.</for_members_only>
         <level_unmet>Lo sentimos, pero no tienes el nivel necesario para accesar a este chat.</level_unmet>
+        <user_reported>El reporte ha sido enviado. Será atendido tan pronto como un moderador lo revise.</user_reported>
+        <invalid_action>Acción inválida</invalid_action>
+        <invalid_uid>Identificador de usuario inválido</invalid_uid>
+        <missing_reason>Por favor provee una razón para tu acción</missing_reason>
+        <missing_window>Tiempo de baneo inválido</missing_window>
+        
+        <user_not_found>El usuario señalado no ha sido encontrado en la base de datos</user_not_found>
+        <user_disabled>El usuario señalado ha sido desactivado previamente</user_disabled>
+        <mods_cannot_be_touched>Mods/admins no pueden ser reportados, pateados ni baneados</mods_cannot_be_touched>
+        <banned_until>Lo sentimos, pero no puedes accesar este chat hasta dentro de {$time}</banned_until>
+        <user_banned_until>Este usuario está actualmente impedido a accesar este chat hasta dentro de {$time}</user_banned_until>
+        <already_reported>Ya has reportado reportado a este usuario en el transcurso de las últimas 12 horas. No hay necesidad de reportarlo de nuevo</already_reported>
+
+        <user_has_been_kicked><![CDATA[
+            {$user} ha sido pateado de este chat: <span class="critical">{$reason}</span>
+        ]]></user_has_been_kicked>
+        <user_has_been_banned><![CDATA[
+            {$user} ha sido baneado de este chat por {$time}: <span class="critical">{$reason}</span>
+        ]]></user_has_been_banned>
+        <user_has_been_banned2><![CDATA[
+            {$user} ha baneado a {$target} en el chat <a href="{$link}">{$chat}</a> por {$time}:
+            <span class="critical">{$reason}</span>
+        ]]></user_has_been_banned2>
+        <chat_disabled>Chat deshabilitado</chat_disabled>
+        
+        <user_report_template>
+            <subject><![CDATA[
+                {$user} ha reportado a {$target} en el chat "{$chat}"
+            ]]></subject>
+            <body><![CDATA[
+                <p>
+                    ¡Saludos, moderador!
+                </p>
+                <p>
+                    {$user} ha enviado un reporte de mal comportamiento sobre {$target} en {$chat}:
+                </p>
+                <blockquote style="padding: 10px; background-color: whitesmoke; border-left: 5px solid gray;">
+                    {$reason}
+                </blockquote>
+                <p>
+                    Por favor <a href="{$link}">entra a {$chat}</a> y toma las medidas pertinentes.
+                </p>
+            ]]></body>
+            <notification><![CDATA[
+                {$user} ha reportado a {$target} en {$chat}. Por favor checa tu correo o
+                <a href="{$link}">abre el chat</a> para más información.
+            ]]></notification>
+        </user_report_template>
+
+        <unban>
+            <notification><![CDATA[
+                {$user} le ha restaurado el acceso a {$target} en el chat <a href="{$link}">{$chat}</a>.
+            ]]></notification>
+            <notification2><![CDATA[
+                Tu acceso al chat <a href="{$link}">{$chat}</a> ha sido restaurado.
+            ]]></notification2>
+            <message><![CDATA[
+                El acceso de {$target} a este chat ha sido restaurado.
+            ]]></message>
+        </unban>
     </messages>
     
     <settings_data allow_admin_level="240">

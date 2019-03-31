@@ -18,11 +18,72 @@
            onchange="$(this).closest('form').submit()">
 </form>
 
+<div id="chatroom_actions_menu" class="dropdown_menu" style="display: none"
+     data-user-id="" data-user-name="" data-user-level="">
+    
+    <span class="action main_menu_item" data-action="kick" onclick="chatroom.__execAction(this)"><i 
+          class="fa fa-gavel fa-fw"></i><?= $this_module->language->kick ?></span>
+    
+    <span class="action main_menu_item" data-action="open_ban_dialog" onclick="chatroom.__execAction(this)"><i
+          class="fa fa-ban fa-fw"></i><?= $this_module->language->ban ?></span>
+    
+    <span class="action main_menu_item" data-action="unban" onclick="chatroom.__execAction(this)"><i
+          class="fa fa-thumbs-up fa-fw"></i><?= $this_module->language->unban ?></span>
+    
+    <span class="action main_menu_item" data-action="report" onclick="chatroom.__execAction(this)"><i
+          class="fa fa-warning fa-fw"></i><?= $this_module->language->report ?></span>
+    
+    <span class="action main_menu_item" data-action="view_profile" onclick="chatroom.__execAction(this)"><i
+          class="fa fa-home fa-fw"></i><?= $this_module->language->view_profile ?></span>
+</div>
+
+<div id="chatroom_ban_dialog" style="display: none"
+     title="<?= $this_module->language->ban_dialog->title ?>"
+     data-ok-caption="<?= $language->ok ?>" data-cancel-caption="<?= $language->cancel ?>">
+    
+    <div id="chatroom_ban_target" style="display: none"></div>
+    
+    <form name="chatroom_ban_form" id="chatroom_ban_form" method="post"
+          action="<?= $this_module->get_url() ?>/api/toolbox.php">
+        <input type="hidden" name="action"  value="ban">
+        <input type="hidden" name="chat"    value="">
+        <input type="hidden" name="user_id" value="">
+        
+        <div class="field">
+            <div class="caption">
+                <?= $this_module->language->ban_dialog->info ?>
+            </div>
+            <div class="input">
+                <textarea name="reason" rows="3"></textarea>
+            </div>
+        </div>
+        <div class="field">
+            <?= $this_module->language->ban_dialog->select ?>
+        </div>
+        <div class="input">
+            <? foreach($this_module->language->ban_dialog->options->option as $option): ?>
+                <label class="framed_content" style="display: block; margin: 0 0 5px 25px;"
+                       onmouseover="$(this).toggleClass('state_hover', true)"
+                       onmouseout="$(this).toggleClass('state_hover', false)">
+                    <input type="radio" name="window" value="<?= $option["value"] ?>" style="display: none;"
+                           onchange="$(this).closest('.input').find('label.state_active').removeClass('state_active'); $(this).closest('label').addClass('state_active');">
+                    <?= trim($option) ?>
+                </label>
+            <? endforeach; ?>
+        </div>
+    </form>
+    
+</div>
+
 <div id="chatroom_messages" style="display: none">
     
     <div class="chat_critical_error"><?= unindent($this_module->language->messages->critical_error) ?></div>
     <div class="chat_response_data_undefined"><?= unindent($this_module->language->messages->response_data_undefined) ?></div>
     <div class="chat_response_data_invalid"><?= unindent($this_module->language->messages->response_data_invalid) ?></div>
+    <div class="chat_report_prompt"><?= $this_module->language->report_prompt ?></div>
+    <div class="chat_kick_prompt"><?= $this_module->language->kick_prompt ?></div>
+    <div class="chat_user_reported"><?= $this_module->language->messages->user_reported ?></div>
+    <div class="chat_disabled"><?= $this_module->language->messages->chat_disabled ?></div>
     
     <template class="chat_body">
         
@@ -43,14 +104,25 @@
             <div class="sent"><span class="time">{{time}}</span></div>
             <div class="arrow left"><span class="tip"></span></div>
             <div class="message">
-                <p class="author" data-user-id="{{id_sender}}">
+                <span class="pull-right pseudo_link fa fa-ellipsis-h fa-fw is_submenu_trigger"
+                      data-submenu="#chatroom_actions_menu"
+                      onclick="chatroom.__prepareActionsMenu(this)"></span>
+                <p class="author" data-user-id="{{id_sender}}" data-user-name="{{sender_user_name}}"
+                   data-user-level="{{sender_level}}" data-is-banned="{{_sender_is_banned}}">
                     {{#if sender_avatar}}
                         <span class="avatar">
                             <img src="{{sender_avatar}}">
                         </span>
                     {{/if}}
                     <span class="user_display_name" data-user-level="{{sender_level}}">
-                        <a href="<?= $config->full_root_path ?>/user/{{sender_user_name}}" target="_blank">{{sender_display_name}}</a><br>
+                        {{#if _sender_is_banned}}
+                            <span class="critical">
+                                <i class="fa fa-ban"></i>
+                                {{sender_display_name}}
+                            </span><br>
+                        {{else}}
+                            {{sender_display_name}}<br>
+                        {{/if}}
                         <span class="author_info">
                             <i class="fa fa-user"></i> {{sender_level_caption}}
                         </span>
