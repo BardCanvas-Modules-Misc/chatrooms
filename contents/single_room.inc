@@ -46,4 +46,4 @@ $this_module = $current_module;
 </div>
 
 <?
-include "{$this_module->abspath}/contents/chatroom_messages.inc";
+include "{$this_module->abspath}/contents/controller_templates.inc";

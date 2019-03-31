@@ -80,4 +80,4 @@ if( $account->level < $chats_registry[$current_chat]->level ) return;
 </div>
 
 <?
-include "{$this_module->abspath}/contents/chatroom_messages.inc";
+include "{$this_module->abspath}/contents/controller_templates.inc";
