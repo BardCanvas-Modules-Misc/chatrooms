@@ -50,7 +50,7 @@
                         </span>
                     {{/if}}
                     <span class="user_display_name" data-user-level="{{sender_level}}">
-                        {{sender_display_name}}<br>
+                        <a href="<?= $config->full_root_path ?>/user/{{sender_user_name}}" target="_blank">{{sender_display_name}}</a><br>
                         <span class="author_info">
                             <i class="fa fa-user"></i> {{sender_level_caption}}
                         </span>
