@@ -31,7 +31,7 @@ $this_module = $current_module;
 <div id="chatroom" class="chatroom" data-chatroom="<?= $current_chat->name ?>"
      data-params='{"chat": "<?= $current_chat->name ?>"}'
      data-hide-self-details="true">
-    <div class="chat_title"><?= "{$current_chat->name} ({$current_chat->title})" ?></div>
+    <div class="chat_title aligncenter"><?= "{$settings->get("engine.website_name")} • {$current_chat->name} ({$current_chat->title})" ?></div>
     <div class="target"></div>
 </div>
 
