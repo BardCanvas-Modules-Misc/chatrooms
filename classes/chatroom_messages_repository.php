@@ -1,6 +1,7 @@
 <?php
 namespace hng2_modules\chatrooms;
 
+use hng2_base\accounts_repository;
 use hng2_repository\abstract_repository;
 
 class chatroom_messages_repository extends abstract_repository
@@ -138,5 +139,36 @@ class chatroom_messages_repository extends abstract_repository
         }
         
         return $return;
+    }
+    
+    public function get_active_users_list($chat_name, $within_minutes = 5)
+    {
+        global $account, $config;
+        
+        $since = date("Y-m-d H:i:s", strtotime("now - $within_minutes minutes"));
+        $filter = array("chat_name = '$chat_name'", "sent > '$since'", "id_sender <> '0'", "id_sender <> '$account->id_account'");
+        $rows   = $this->find($filter, 0, 0, "sent asc");
+        
+        if( empty($rows) ) return array();
+        
+        $active_users = array();
+        
+        $aids = array();
+        foreach($rows as $row) $aids[] = $row->id_sender;
+        reset($rows);
+        
+        $arepo = new accounts_repository();
+        $prefs = $arepo->get_multiple_engine_prefs($aids, "@chatrooms:{$chat_name}.banned_until");
+        foreach($rows as $row)
+        {
+            if( isset($prefs[$row->id_sender]) && date("Y-m-d H:i:s") < $prefs[$row->id_sender] )
+                continue;
+            
+            $active_users[] = "<a class='user_display_name' data-user-level='{$row->sender_level}'
+                                  href='{$config->full_root_path}/user/{$row->sender_user_name}'><i 
+                                  class='fa fa-user fa-fw'></i>{$row->sender_display_name}</a>";
+        }
+        
+        return $active_users;
     }
 }
