@@ -18,6 +18,21 @@
         <menu>Chatroom</menu>
     </single>
     
+    <invitations>
+        <empty><![CDATA[
+            The <span class="alternate">{$chat}</span> chatroom is empty.<br>
+            <a href="{$link}" target="_blank">
+                <b><i class="fa fa-play fa-fw"></i>Start a conversation</b>
+            </a>
+        ]]></empty>
+        <filled><![CDATA[
+            There are {$count} users chatting on the <span class="alternate">{$chat}</span> chatroom.<br>
+            <a href="{$link}" target="_blank">
+                <b><i class="fa fa-play fa-fw"></i>Click here to join now</b>
+            </a>
+        ]]></filled>
+    </invitations>
+    
     <input_placeholder>Type a message and hit ENTER</input_placeholder>
     
     <view_profile>View profile</view_profile>

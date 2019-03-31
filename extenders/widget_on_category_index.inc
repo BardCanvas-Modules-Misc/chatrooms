@@ -10,6 +10,7 @@
  */
 
 use hng2_base\module;
+use hng2_modules\chatrooms\chatroom_messages_repository;
 
 global $settings, $category, $account;
 
@@ -55,6 +56,34 @@ if( ! isset($category_chats[$category->slug]) ) return;
 
 $current_chat = $category_chats[$category->slug];
 if( $account->level < $chats_registry[$current_chat]->level ) return;
+
+if( preg_match("/ios|android|phone|mobile/i", $_SERVER["HTTP_USER_AGENT"]) )
+{
+    $repository = new chatroom_messages_repository();
+    $active     = $repository->get_active_users_list($current_chat);
+    $count      = count($active);
+    
+    if( $count == 0 )
+        $message = replace_escaped_objects($this_module->language->invitations->empty, array(
+            '{$link}'  => "{$config->full_root_path}/chatroom/" . wp_sanitize_filename($current_chat),
+            '{$chat}'  => $current_chat,
+        ));
+    else
+        $message = replace_escaped_objects($this_module->language->invitations->filled, array(
+            '{$link}'  => "{$config->full_root_path}/chatroom/" . wp_sanitize_filename($current_chat),
+            '{$count}' => $count,
+            '{$chat}'  => $current_chat,
+        ));
+    
+    echo "
+        <div class='content_frame framed_content state_ok aligncenter'
+             style='font-size: 1.2em; line-height: normal; padding: 20px;'>
+            $message
+        </div>
+    ";
+    
+    return;
+}
 ?>
 
 <script type="text/javascript" src="<?= $this_module->get_url() ?>/lib/template7-1.4.0/template7.min.js"></script>

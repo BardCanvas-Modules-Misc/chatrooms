@@ -19,6 +19,21 @@
         <title>Chatroom: {$title}</title>
         <menu>Chat</menu>
     </single>
+
+    <invitations>
+        <empty><![CDATA[
+            El chat <span class="alternate">{$chat}</span> está vacío.<br>
+            <a href="{$link}" target="_blank">
+                <b><i class="fa fa-play fa-fw"></i>Inicia una conversación</b>
+            </a>
+        ]]></empty>
+        <filled><![CDATA[
+            Actualmente hay {$count} usuarios chateando en <span class="alternate">{$chat}</span>.<br>
+            <a href="{$link}" target="_blank">
+                <b><i class="fa fa-play fa-fw"></i>Da click aquí para unírteles</b>
+            </a>
+        ]]></filled>
+    </invitations>
     
     <view_profile>Ver perfil</view_profile>
     <report>Reportar con los moderadores...</report>
