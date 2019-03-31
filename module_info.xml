@@ -12,4 +12,16 @@
         <disable>true</disable>
     </working_flags>
     
+    <php_includes>
+        <document_handler>extenders/document_handler.inc</document_handler>
+    </php_includes>
+    
+    <extends_to>
+        <posts>
+            <posts_by_category_index>
+                <after_heading>/extenders/widget_on_category_index.inc</after_heading>
+            </posts_by_category_index>
+        </posts>
+    </extends_to>
+    
 </module>

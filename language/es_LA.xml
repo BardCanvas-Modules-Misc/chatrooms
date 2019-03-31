@@ -11,10 +11,24 @@
         Salones de chat para BardCanvas
     </description>
     
+    <input_placeholder>Escribe mensaje y oprime RETORNO</input_placeholder>
+    
     <messages>
         <chat_name_missing>Nombre de chat no proporcionado</chat_name_missing>
         <chat_unexistent>Lo sentimos, pero el chat '%s' no está registrado</chat_unexistent>
         <invalid_timestamp>La semilla de tiempo proporcionada es inválida</invalid_timestamp>
+        
+        <critical_error><![CDATA[
+            Ha habido un error al tratar de obtener mensajes:<br>
+            <span class="critical">%s</span>
+        ]]></critical_error>
+        <response_data_undefined>Se ha recibido una respuesta nula del servidor de chat</response_data_undefined>
+        <response_data_invalid>El formato de datos del servidor de chat es inválido</response_data_invalid>
+        <chat_empty>No se han enviado mensajes en las últimas 24 horas.</chat_empty>
+        <click_here_to_login>Abrir sesión ahora</click_here_to_login>
+        <more_information>Más información</more_information>
+        <for_members_only>Lo sentimos, pero este chat es sólo para usuarios registrados.</for_members_only>
+        <level_unmet>Lo sentimos, pero no tienes el nivel necesario para accesar a este chat.</level_unmet>
     </messages>
     
     <settings_data allow_admin_level="240">
@@ -25,12 +39,32 @@
             <description><![CDATA[
                 Especifica una lista de salones de chat, uno por línea, usando la siguiente sintaxis:<br><br>
                 
-                <code>nombre | descripción | nivel_minimo</code><br><br>
+                <code>nombre | descripción | nivel minimo</code><br><br>
                 
                 Ejemplos:<br><br>
                 
                 <code>Lobby   | De todo un poco   |  10</code><br>
                 <code>Autores | Sólo para autores | 100</code><br><br>
+                
+                Puedes desactivar temporalmente cualquier salón añadiendo al inicio de su línea un símbolo <code>#</code>.
+            ]]></description>
+            <type>code</type>
+        </specs>
+        
+        <specs key="on_category_chats" required_modules="posts">
+            <title>Muestreo en índices de categorías</title>
+            <description><![CDATA[
+                Puedes mostrar widgets de chat debajo del encabezado en índices de categorías específicos.
+                Especifica uno por línea usando la siguiente sintaxis:<br><br>
+                
+                <code>slug de categoría | nombre del chat</code><br><br>
+                
+                Ejemplos:<br><br>
+                
+                <code>sin_categoria | Lobby</code><br>
+                <code>foros         | Caja de gritos</code><br>
+                <code>admins_only   | Valhalla</code><br>
+                <br>
                 
                 Puedes desactivar temporalmente cualquier salón añadiendo al inicio de su línea un símbolo <code>#</code>.
             ]]></description>

@@ -1,0 +1,219 @@
+/**
+ * Chatroom styles
+ *
+ * @package    HNG2
+ * @subpackage chatrooms
+ * @author     Alejandro Caballero - lava.caballero@gmail.com
+ */
+
+body[data-chatroom-name] #content { padding: 0; overflow: hidden; }
+
+.chatroom {
+    position:    relative;
+    font-family: 'Segoe UI', Arial, Helvetica, sans-serif;
+    font-size:   12pt;
+    line-height: normal;
+}
+
+.chatroom:after {
+    display: block;
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, .75) url('preloader.svg') center center no-repeat;
+    background-size: 64px;
+}
+
+.chatroom[data-loaded="true"]:after {
+    display: none;
+}
+
+.chatroom .chat_title {
+    background-color: dimgrey;
+    color: white;
+    font-size: 14px;
+    line-height: 16px;
+    padding: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.chatroom .chat_title .detach_icon {
+    color: white;
+    float: right;
+}
+
+.chatroom .target {
+    display: flex;
+    width: 100%;
+    height: calc(60vh - 20px);
+    min-height: 200px;
+    flex-wrap: wrap;
+    position: relative;
+    background-color: whitesmoke;
+    align-items: stretch;
+    align-content: stretch;
+}
+
+body[data-chatroom-name] .chatroom .target {
+    height: calc(100vh - 20px);
+}
+
+.chatroom .target .messages {
+    padding: 2px;
+    position: relative;
+    width: 100%;
+    overflow: auto;
+    margin-bottom: 28px;
+    height: calc(100% - 28px);
+}
+
+.chatroom .target .messages .chat-message {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    align-content: stretch;
+    margin-bottom: 10px;
+    position: relative;
+}
+
+.chatroom .target .messages .chat-message:last-child {
+    margin-bottom: 0;
+}
+
+.chatroom .target .messages .chat-message.chat-notice {
+    margin-top:   0;
+    margin-left:  0;
+    margin-right: 0;
+    font-size:    0.9em;
+}
+
+.chatroom .target .messages .chat-message .sent {
+    font-size: 0.8em;
+    color: grey;
+    align-self: flex-end;
+}
+
+.chatroom .target .messages .chat-message .message {
+    display: inline-block;
+    width: auto;
+    padding: 2px 4px;
+    border: 1px solid transparent;
+    border-radius: 5px;
+    max-width: calc(80% - 32px);
+}
+
+.chatroom .target .messages .chat-message .message-body .cometchat_smiley {
+    width: auto;
+    height: 1em;
+    vertical-align: bottom;
+}
+
+.chatroom .target .messages .chat-message .author {
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: bold;
+    font-size: 0.8rem;
+    line-height: 0.9rem;
+    display: flex;
+    flex-wrap: nowrap;
+}
+
+.chatroom[data-hide-self-details="true"] .target .messages .chat-message.outgoing .author {
+    display: none;
+}
+
+.chatroom .target .messages .chat-message .author .avatar img {
+    width: 32px;
+    height: 32px;
+    border: 1px solid dimgrey;
+    border-radius: 2px;
+    margin-right: 5px;
+}
+
+.chatroom .target .messages .chat-message .author_info {
+    display: inline-block;
+    white-space: nowrap;
+    font-weight: normal;
+    font-size: 0.7rem;
+    line-height: 0.8rem;
+    color: dimgrey;
+}
+
+.chatroom .target .messages .chat-message p {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.chatroom .target .input {
+    position: absolute; width: 100%;
+    white-space: nowrap; 
+    bottom: 0; padding: 0 2px;
+}
+
+.chatroom .target .input textarea {
+    padding-right: 28px;
+    width: 100%;
+}
+
+.chatroom .target .input .buttons {
+    display: inline-block;
+    position: absolute;
+    top: 2px;
+    right: 4px;
+    z-index: 1;
+    font-size: 12px;
+}
+
+.chatroom .target .messages .chat-message .arrow { width: 10px; }
+
+
+
+.chatroom .target .messages .chat-message.incoming .arrow.left  { order: 1; }
+.chatroom .target .messages .chat-message.incoming .message     { order: 2; }
+.chatroom .target .messages .chat-message.incoming .sent        { order: 3; padding-left: 4px; }
+.chatroom .target .messages .chat-message.incoming .arrow.right { order: 4; flex-grow: 1; }
+
+.chatroom .target .messages .chat-message.incoming .message {
+    background-color: #e6e9ed; border-color: dimgrey;
+}
+
+.chatroom .target .messages .chat-message.incoming .arrow.left .tip {
+    display: inline-block;
+    width: 0;
+    height: 0;
+    border: 10px solid transparent;
+    border-right-color: dimgrey;
+    border-left: 0;
+    border-top: 0;
+}
+.chatroom .target .messages .chat-message.incoming .arrow.right .tip {
+    display: none;
+}
+
+
+
+.chatroom .target .messages .chat-message.outgoing .arrow.left   { order: 1; flex-grow: 1; }
+.chatroom .target .messages .chat-message.outgoing .sent         { order: 2; padding-right: 4px; }
+.chatroom .target .messages .chat-message.outgoing .message      { order: 3; }
+.chatroom .target .messages .chat-message.outgoing .arrow.right  { order: 4; }
+
+.chatroom .target .messages .chat-message.outgoing .message {
+    background-color: #dcf8c6; border-color: green;
+}
+
+.chatroom .target .messages .chat-message.outgoing .arrow.left  .tip {
+    display: none;
+}
+.chatroom .target .messages .chat-message.outgoing .arrow.right .tip {
+    display: inline-block;
+    width: 0;
+    height: 0;
+    border: 10px solid transparent;
+    border-left-color: green;
+    border-right: 0;
+    border-top: 0;
+}

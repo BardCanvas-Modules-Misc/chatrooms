@@ -10,7 +10,7 @@ class chatroom_messages_repository extends abstract_repository
     protected $key_column_name = 'message_id';
     
     protected $additional_select_fields = array(
-        "( select concat(a.user_name, '\t', a.display_name, '\t', a.level) 
+        "( select concat(a.user_name, '\t', a.display_name, '\t', a.level, '\t', a.avatar, '\t', a.email) 
            from account a where a.id_account = chatroom_messages.id_sender
            ) as __sender_data"
     );
