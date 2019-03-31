@@ -1,4 +1,14 @@
-<? if( empty($config->globals["@chatrooms:collection_for_submenu"]) ) return; ?>
+<?php
+/**
+ * Post-footer menu
+ *
+ * @package    BardCanvas
+ * @subpackage chatrooms
+ * @author     Alejandro Caballero - lava.caballero@gmail.com
+ */
+
+if( empty($config->globals["@chatrooms:collection_for_submenu"]) ) return;
+?>
 
 <!-- chatrooms menu items -->
 

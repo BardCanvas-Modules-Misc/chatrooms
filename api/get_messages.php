@@ -2,7 +2,7 @@
 /**
  * Chatroom messages deliverer
  *
- * @package    HNG2
+ * @package    BardCanvas
  * @subpackage chatrooms
  * @author     Alejandro Caballero - lava.caballero@gmail.com
  * 
