@@ -107,13 +107,16 @@ var chatroom = {
     
     __addWarning: function(text)
     {
-        chatroom.$container.find('.target .messages').append(
+        var $container = chatroom.$container.find('.target .messages');
+        
+        $container.append(
             '<div class="framed_content state_ko aligncenter">' +
             '<i class="fa fa-warning"></i> ' + text +
             '</div>'
         );
         
         ion.sound.play("computer_error");
+        $container.scrollTo('max');
     },
     
     init: function($container, $messages)
