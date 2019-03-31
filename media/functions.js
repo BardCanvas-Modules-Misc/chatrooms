@@ -105,6 +105,17 @@ var chatroom = {
         return $xhr;
     },
     
+    __addWarning: function(text)
+    {
+        chatroom.$container.find('.target .messages').append(
+            '<div class="framed_content state_ko aligncenter">' +
+            '<i class="fa fa-warning"></i> ' + text +
+            '</div>'
+        );
+        
+        ion.sound.play("computer_error");
+    },
+    
     init: function($container, $messages)
     {
         chatroom.$container          = $container;
@@ -120,7 +131,7 @@ var chatroom = {
         chatroom.start();
         
         ion.sound({
-            sounds: [{name: "pop_cork"}],
+            sounds: [{name: "pop_cork"}, {name: 'computer_error'}],
             volume:  1,
             path:    $_FULL_ROOT_PATH + "/lib/ion.sound-3.0.7/sounds/",
             preload: true
@@ -292,15 +303,17 @@ var chatroom = {
             item.class             = item.id_sender === chatroom.__accountId ? 'outgoing' : 'incoming';
             item.message           = item.contents;
             
-            $container.append( chatroom.__getTemplate('chat_message', item) );
+            var $item = $( chatroom.__getTemplate('chat_message', item) );
+            $item.find('img').load(function() { $container.scrollTo('max'); });
+            
+            $container.append( $item );
         }
         
         if( response.meta.last_message_timestamp !== '' )
             chatroom.params.since = response.meta.last_message_timestamp;
         
         if( response.data.length > 0 ) ion.sound.play("pop_cork");
-        
-        $container.scrollTo('max');
+        if( response.data.length > 0 ) $container.scrollTo('max');
         chatroom.__firstRun = false;
     },
     
@@ -308,32 +321,32 @@ var chatroom = {
     {
         if( typeof response !== 'object' )
         {
-            throw_notification(sprintf(chatroom.__getMessage('chat_critical_error'), response), 'warning');
+            chatroom.__addWarning(sprintf(chatroom.__getMessage('chat_critical_error'), response));
             
             return false;
         }
         
         if( response.message !== 'OK' )
         {
-            throw_notification(sprintf(chatroom.__getMessage('chat_critical_error'), response.message), 'warning');
+            chatroom.__addWarning(sprintf(chatroom.__getMessage('chat_critical_error'), response.message));
             
             return false;
         }
         
         if( typeof response.data === 'undefined' )
         {
-            throw_notification(sprintf(
+            chatroom.__addWarning(sprintf(
                 chatroom.__getMessage('chat_critical_error'), chatroom.__getMessage('chat_response_data_undefined')
-            ), 'warning');
+            ));
             
             return false;
         }
         
         if( typeof response.data !== 'object' )
         {
-            throw_notification(sprintf(
+            chatroom.__addWarning(sprintf(
                 chatroom.__getMessage('chat_critical_error'), chatroom.__getMessage('chat_response_data_invalid')
-            ), 'warning');
+            ));
             
             return false;
         }
@@ -359,7 +372,7 @@ var chatroom = {
             chatroom.title, $xhr.status, $xhr.statusText
         );
         
-        throw_notification(contents, 'warning');
+        chatroom.__addWarning(contents);
     },
     
     __readjust: function()
@@ -405,7 +418,7 @@ var chatroom = {
                     'Cannot post message to the chat!<br>Remote response:<br><span class="critical">%s</span>',
                     response
                 );
-                throw_notification(message, 'warning');
+                chatroom.__addWarning(message);
                 
                 $textarea.closest('.input').unblock();
                 
@@ -418,7 +431,7 @@ var chatroom = {
                     'Cannot post message to the chat!<br>Remote response:<br><span class="critical">%s</span>',
                     response.message
                 );
-                throw_notification(message, 'warning');
+                chatroom.__addWarning(message);
                 
                 $textarea.closest('.input').unblock();
                 
@@ -440,13 +453,42 @@ var chatroom = {
                 $xhr.status, $xhr.statusText
             );
             
-            throw_notification(contents, 'warning');
+            chatroom.__addWarning(contents);
             $textarea.closest('.input').unblock();
         };
         
         $textarea.closest('.input').block(blockUI_smallest_params);
         chatroom.abort();
         chatroom.__post( chatroom.__sendMessageScript, params, success, error, chatroom.timeout );
+    },
+    
+    __sendImage: function()
+    {
+        var $form  = $('#chatroom_image_submitter');
+        var $chat  = $form.find('input[name="chat"]');
+        var $input = $form.find('input[name="image"]');
+        
+        if( $form.attr('data-initialized') !== 'true' )
+        {
+            $form.ajaxForm({
+                target: '#chatroom_image_target',
+                beforeSubmit: function(formData, $form, options)
+                {
+                    chatroom.$container.find('.target .input').block(blockUI_smallest_params);
+                },
+                success: function(responseText, statusText, xhr, $form)
+                {
+                    chatroom.$container.find('.target .input').unblock();
+                    
+                    if( responseText !== 'OK' )
+                        chatroom.__addWarning(responseText);
+                }
+            });
+        }
+        
+        $form[0].reset();
+        $chat.val( chatroom.params.chat );
+        $input.click();
     }
 };
 

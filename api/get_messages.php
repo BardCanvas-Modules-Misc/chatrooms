@@ -57,6 +57,7 @@ if( ! empty($rows) )
 {
     $row = current($rows);
     $lts = $row->sent;
+    $rows = array_reverse($rows);
 }
 
 $meta = (object) array(

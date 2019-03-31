@@ -37,7 +37,8 @@ class chatroom_messages_repository extends abstract_repository
      */
     public function find($where, $limit, $offset, $order)
     {
-        return parent::find($where, $limit, $offset, $order);
+        /** @noinspection PhpParamsInspection */
+        return $this->process_rows(parent::find($where, $limit, $offset, $order));
     }
     
     /**
@@ -74,6 +75,36 @@ class chatroom_messages_repository extends abstract_repository
             throw new \Exception(
                 "Invalid object class! Expected: {$this->row_class}, received: " . get_class($record)
             );
+    }
+    
+    /**
+     * @param chatroom_message_record[] $rows
+     * 
+     * @return chatroom_message_record[]
+     */
+    private function process_rows($rows)
+    {
+        global $config;
+        
+        if( empty($rows) ) return array();
+        
+        foreach($rows as &$row)
+        {
+            if( substr($row->contents, 0, 7) == "@image:" )
+            {
+                $url = $config->full_root_url
+                     . "/data/uploaded_chat_images/"
+                     .  str_replace("@image:", "", $row->contents);
+                $row->contents = "<img class='image' src='$url'>";
+                
+                continue;
+            }
+            
+            $row->contents = convert_emojis($row->contents);
+        }
+        
+        reset($rows);
+        return $rows;
     }
     
     /**

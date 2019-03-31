@@ -14,6 +14,13 @@
     <input_placeholder>Escribe mensaje y oprime RETORNO</input_placeholder>
     
     <messages>
+        <cannot_create_images_directory>¡No se puede crear el directorio de imágenes! El directorio de datos no es escribible. Por favor informa al personal de soporte.</cannot_create_images_directory>
+        <cannot_create_directory>¡No se puede crear el contenedor {$dir} en el directorio de imágenes! Por favor informa al personal de soporte.</cannot_create_directory>
+        <file_already_uploaded>Lo sentimos, pero el archivo que has subido ya existe</file_already_uploaded>
+        <cannot_move_file>Lo sentimos, pero no se ha podido mover el archivo que has subido al directorio destino. Por favor intenta de nuevo. Si el problema persiste, informa al personal de soporte.</cannot_move_file>
+        <no_image_uploaded>Por favor especifica una imagen a subir.</no_image_uploaded>
+        <invalid_image_uploaded>Por favor sube una imagen JPEG/PNG/GIF</invalid_image_uploaded>
+        <empty_image_uploaded>Lo sentimos, pero has subido un archivo vacío</empty_image_uploaded>
         <chat_name_missing>Nombre de chat no proporcionado</chat_name_missing>
         <chat_unexistent>Lo sentimos, pero el chat '%s' no está registrado</chat_unexistent>
         <invalid_timestamp>La semilla de tiempo proporcionada es inválida</invalid_timestamp>

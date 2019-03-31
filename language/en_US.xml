@@ -18,6 +18,13 @@
     <input_placeholder>Type a message and hit ENTER</input_placeholder>
     
     <messages>
+        <cannot_create_images_directory>Cannot create images directory! The data directory isn't writable. Please notify the tech support staff.</cannot_create_images_directory>
+        <cannot_create_directory>Cannot create container {$dir} in images directory! Please inform the tech support staff.</cannot_create_directory>
+        <file_already_uploaded>Sorry, but the file you've uploaded already exists</file_already_uploaded>
+        <cannot_move_file>Sorry, but it isn't possible to move the file you've uploaded to its destination directory. Please try again. If the problem persists, please contact the tech support staff.</cannot_move_file>
+        <no_image_uploaded>Please select an image to upload</no_image_uploaded>
+        <invalid_image_uploaded>Please upload a JPEG/PNG/GIF image</invalid_image_uploaded>
+        <empty_image_uploaded>Sorry, but you uploaded an empty file</empty_image_uploaded>
         <chat_name_missing>Chat name missing</chat_name_missing>
         <chat_unexistent>Sorry, but the chat '%s' is not registered</chat_unexistent>
         <invalid_timestamp>The timestamp provided isn't valid</invalid_timestamp>

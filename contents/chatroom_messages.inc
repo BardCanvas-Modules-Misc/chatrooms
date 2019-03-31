@@ -8,6 +8,16 @@
  */
 ?>
 
+<div id="chatroom_image_target" style="display: none"></div>
+<form name="chatroom_image_submitter" id="chatroom_image_submitter"
+      method="post" enctype="multipart/form-data"
+      action="<?= $this_module->get_url() ?>/api/post_image.php"
+      data-initialized="false" style="display: none">
+    <input type="hidden" name="chat" value="">
+    <input type="file" name="image" accept="image/png, image/jpeg, image/gif"
+           onchange="$(this).closest('form').submit()">
+</form>
+
 <div id="chatroom_messages" style="display: none">
     
     <div class="chat_critical_error"><?= unindent($this_module->language->messages->critical_error) ?></div>
@@ -21,6 +31,7 @@
             <textarea class="expandible_textarea" placeholder="<?= $this_module->language->input_placeholder ?>"></textarea>
             <div class="buttons">
                 <i class="fa send-button fa-paper-plane fa-lg pseudo_link" onclick="chatroom.__sendMessage()"></i>
+                <i class="fa fa-image fa-lg pseudo_link" style="margin-left: 5px;" onclick="chatroom.__sendImage()"></i>
             </div>
         </div>
         
