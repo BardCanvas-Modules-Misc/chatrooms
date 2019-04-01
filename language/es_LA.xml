@@ -40,6 +40,8 @@
     <kick>Sacar por 10 minutos...</kick>
     <ban>Banear del chat...</ban>
     <unban>Restaurar acceso</unban>
+    <delete_this_message>Borrar mensaje</delete_this_message>
+    <purge_24h>Purgar últimas 24h de usuario</purge_24h>
     
     <report_prompt>Por favor provee una razón para tu reporte:</report_prompt>
     <kick_prompt>Introduce una razón para el pateo:</kick_prompt>
@@ -151,6 +153,17 @@
                 El acceso de {$target} a este chat ha sido restaurado.
             ]]></message>
         </unban>
+        
+        <invalid_message_id>Por favor especifica un id de mensaje válido</invalid_message_id>
+        <message_not_found>No se ha encontrado el mensaje en la base de datos. Es posible que alguien más lo borrase.</message_not_found>
+        <message_deleted><![CDATA[
+            {$user} ha borrado el siguiente mensaje de {$author} en {$chat}:
+            <span class="alternate">{$excerpt}</span>
+        ]]></message_deleted>
+        <messages_purged><![CDATA[
+            {$user} ha purgado las últimas 24 horas de mensajes enviados por {$author} en {$chat}.
+            {$count} mensajes han sido borrados.
+        ]]></messages_purged>
     </messages>
     
     <settings_data allow_admin_level="240">

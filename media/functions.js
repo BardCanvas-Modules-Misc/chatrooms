@@ -631,13 +631,16 @@ var chatroom = {
     __prepareActionsMenu: function(trigger)
     {
         var $trigger      = $(trigger);
-        var $author       = $trigger.closest('.message').find('.author');
+        var $message      = $trigger.closest('.message');
+        var message_id    = $message.attr('data-message-id');
+        var $author       = $message.find('.author');
         var author_id     = $author.attr('data-user-id');
         var author_lvl    = parseInt($author.attr('data-user-level'));
         var author_uname  = $author.attr('data-user-name');
         var author_banned = $author.attr('data-is-banned') === 'true';
         
         var $submenu = $( $trigger.attr('data-submenu') );
+        $submenu.attr('data-message-id', message_id);
         $submenu.attr('data-user-id',    author_id);
         $submenu.attr('data-user-level', author_lvl);
         $submenu.attr('data-user-name',  author_uname);
@@ -660,6 +663,8 @@ var chatroom = {
             if( author_lvl >= 200 || author_banned )
                 $submenu.find('.action[data-action="report"]').hide();
             
+            $submenu.find('.action[data-action="delete_this"]').hide();
+            $submenu.find('.action[data-action="purge_24h"]').hide();
             $submenu.find('.action[data-action="kick"]').hide();
             $submenu.find('.action[data-action="open_ban_dialog"]').hide();
             $submenu.find('.action[data-action="unban"]').hide();
@@ -671,6 +676,7 @@ var chatroom = {
         var $trigger     = $(trigger);
         var action       = $trigger.attr('data-action');
         var $submenu     = $trigger.closest('.dropdown_menu');
+        var message_id   = $submenu.attr('data-message-id');
         var author_id    = $submenu.attr('data-user-id');
         var author_lvl   = $submenu.attr('data-user-level');
         var author_uname = $submenu.attr('data-user-name');
@@ -694,11 +700,11 @@ var chatroom = {
             return;
         }
         
-        if( action === 'unban' )
+        if( action === 'unban' || action === 'delete_this' || action === 'purge_24h' )
         {
             if( ! confirm($_GENERIC_CONFIRMATION) ) return;
         }
-        else
+        else if( action === 'kick' || action === 'report' )
         {
             var message = chatroom.__getMessage( action === 'kick' ? 'chat_kick_prompt' : 'chat_report_prompt' );
             var reason  = prompt(message);
@@ -706,10 +712,11 @@ var chatroom = {
         }
         
         var params = {
-            action:  action,
-            chat:    chatroom.params.chat,
-            user_id: author_id,
-            reason:  reason
+            action:     action,
+            chat:       chatroom.params.chat,
+            message_id: message_id,
+            user_id:    author_id,
+            reason:     reason
         };
         $.blockUI(blockUI_default_params);
         $.post($_CHATROOM_TOOLBOX, params, function(response)
@@ -722,8 +729,30 @@ var chatroom = {
                 return;
             }
             
+            var selector;
+            
             if( action === 'report' )
+            {
                 chatroom.__addInfo( chatroom.__getMessage('chat_user_reported') );
+            }
+            else if( action === 'delete_this' )
+            {
+                selector = sprintf('.chat-message .message[data-message-id="%s"]', message_id);
+                chatroom.$container.find(selector).each(function()
+                {
+                    $(this).closest('.chat-message').fadeOut('fast', function() { $(this).remove(); });
+                });
+                chatroom.$container.find('.target .messages').scrollTo('max');
+            }
+            else if( action === 'purge_24h' )
+            {
+                selector = sprintf('.chat-message .message .author[data-user-id="%s"]', author_id);
+                chatroom.$container.find(selector).each(function()
+                {
+                    $(this).closest('.chat-message').fadeOut('fast', function() { $(this).remove(); });
+                });
+                chatroom.$container.find('.target .messages').scrollTo('max');
+            }
         });
     },
 };

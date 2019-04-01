@@ -19,7 +19,13 @@
 </form>
 
 <div id="chatroom_actions_menu" class="dropdown_menu" style="display: none"
-     data-user-id="" data-user-name="" data-user-level="">
+     data-message-id="" data-user-id="" data-user-name="" data-user-level="">
+    
+    <span class="action main_menu_item" data-action="delete_this" onclick="chatroom.__execAction(this)"><i 
+          class="fa fa-trash-o fa-fw"></i><?= $this_module->language->delete_this_message ?></span>
+    
+    <span class="action main_menu_item" data-action="purge_24h" onclick="chatroom.__execAction(this)"><i 
+          class="fa fa-trash fa-fw"></i><?= $this_module->language->purge_24h ?></span>
     
     <span class="action main_menu_item" data-action="kick" onclick="chatroom.__execAction(this)"><i 
           class="fa fa-gavel fa-fw"></i><?= $this_module->language->kick ?></span>
@@ -105,7 +111,7 @@
         <div class="chat-message {{class}}">
             <div class="sent"><span class="time">{{time}}</span></div>
             <div class="arrow left"><span class="tip"></span></div>
-            <div class="message">
+            <div class="message" data-message-id="{{message_id}}">
                 <span class="pull-right pseudo_link fa fa-ellipsis-h fa-fw is_submenu_trigger"
                       data-submenu="#chatroom_actions_menu"
                       onclick="chatroom.__prepareActionsMenu(this)"></span>

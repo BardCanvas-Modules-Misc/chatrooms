@@ -7,8 +7,9 @@
  * @author     Alejandro Caballero - lava.caballero@gmail.com
  * 
  * $_POST params:
- * @param string "action" report|kick|ban|unban
+ * @param string "action" report|kick|ban|unban|delete_this|purge_24h
  * @param string "chat"
+ * @param string "message_id"
  * @param string "user_id"
  * @param string "reason"
  * @param number "window" When action is "ban", this should be the amount of hours.
@@ -35,9 +36,10 @@ if( $account->level < $config::NEWCOMER_USER_LEVEL || $account->state != "enable
 if( empty($_POST["chat"]) ) die( $current_module->language->messages->chat_name_missing );
 if( empty($_POST["action"]) ) die( $current_module->language->messages->invalid_action );
 if( empty($_POST["user_id"]) ) die( $current_module->language->messages->invalid_uid );
-if( ! in_array($_POST["action"], array("report", "kick", "ban", "unban")) )
+if( ! in_array($_POST["action"], array("report", "kick", "ban", "unban", "delete_this", "purge_24h")) )
     die( $current_module->language->messages->invalid_action );
-if( in_array($_POST["action"], array("kick", "ban", "unban")) && $account->level < $config::MODERATOR_USER_LEVEL )
+if( in_array($_POST["action"], array("kick", "ban", "unban", "delete_this", "purge_24h"))
+    && $account->level < $config::MODERATOR_USER_LEVEL )
     die( $language->errors->access_denied );
 if( $_POST["action"] == "ban" && (empty($_POST["window"]) || ! is_numeric($_POST["window"])) )
     die( $current_module->language->messages->missing_window );
@@ -45,6 +47,8 @@ if( $_POST["action"] == "ban" && $_POST["window"] > 720 && $_POST["window"] < 99
     die( $current_module->language->messages->missing_window );
 if( $_POST["action"] == "ban" && $_POST["window"] > 999 )
     die( $current_module->language->messages->missing_window );
+if( $_POST["action"] == "delete_this" && ! is_numeric($_POST["message_id"]) )
+    die( $current_module->language->messages->invalid_message_id );
 
 $target = new account($_POST["user_id"]);
 
@@ -218,6 +222,47 @@ if( $_POST["action"] == "unban" )
         '{$target}' => $target->get_processed_display_name(),
         '{$chat}'   => $_POST["chat"],
         '{$link}'   => "{$config->full_root_path}/chatroom/" . wp_sanitize_filename($_POST["chat"]),
+    ))));
+    
+    die("OK");
+}
+
+#
+# Delete a message
+#
+
+if( $_POST["action"] == "delete_this" )
+{
+    $message = $repository->get($_POST["message_id"]);
+    if( is_null($message) ) die($current_module->language->messages->message_not_found);
+    
+    $repository->delete($_POST["message_id"]);
+    broadcast_to_moderators("information", unindent(replace_escaped_objects(
+        $current_module->language->messages->message_deleted, array(
+        '{$user}'    => $account->get_processed_display_name(),
+        '{$author}'  => $target->get_processed_display_name(),
+        '{$chat}'    => $_POST["chat"],
+        '{$excerpt}' => make_excerpt_of($message->contents, 100),
+    ))));
+    
+    die("OK");
+}
+
+#
+# Purge last 24 hours of user
+#
+
+if( $_POST["action"] == "purge_24h" )
+{
+    $count = $repository->user_submissions_purge($_POST["user_id"], "24 hours");
+    if( empty($count) ) die("OK");
+    
+    broadcast_to_moderators("information", unindent(replace_escaped_objects(
+        $current_module->language->messages->messages_purged, array(
+        '{$user}'    => $account->get_processed_display_name(),
+        '{$author}'  => $target->get_processed_display_name(),
+        '{$chat}'    => $_POST["chat"],
+        '{$count}'   => $count,
     ))));
     
     die("OK");

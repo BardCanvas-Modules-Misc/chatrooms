@@ -40,6 +40,8 @@
     <kick>Kick out for 10 minutes...</kick>
     <ban>Ban from room...</ban>
     <unban>Unban</unban>
+    <delete_this_message>Delete this message</delete_this_message>
+    <purge_24h>Purge user's last 24h</purge_24h>
     
     <report_prompt>Please provide a reason of your report:</report_prompt>
     <kick_prompt>Enter a short reason for the kick:</kick_prompt>
@@ -156,6 +158,17 @@
                 {$target} access to this chat has been restored.
             ]]></message>
         </unban>
+        
+        <invalid_message_id>Please provide a valid message id</invalid_message_id>
+        <message_not_found>The message wasn't found in the database. It might have been deleted earlier.</message_not_found>
+        <message_deleted><![CDATA[
+            {$user} has deleted the next message from {$author} on {$chat}:
+            <span class="alternate">{$excerpt}</span>
+        ]]></message_deleted>
+        <messages_purged><![CDATA[
+            {$user} has purged the last 24 hours of messages submitted by {$author} on {$chat}.
+            {$count} messages have been deleted.
+        ]]></messages_purged>
     </messages>
     
     <settings_data allow_admin_level="240">

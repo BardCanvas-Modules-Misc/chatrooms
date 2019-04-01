@@ -24,7 +24,11 @@ class chatroom_messages_repository extends abstract_repository
      */
     public function get($id)
     {
-        return parent::get($id);
+        $row = parent::get($id);
+        if( is_null($row) ) return null;
+        
+        $rows = $this->process_rows(array($row));
+        return current($rows);
     }
     
     /**
@@ -170,5 +174,22 @@ class chatroom_messages_repository extends abstract_repository
         }
         
         return $active_users;
+    }
+    
+    public function user_submissions_purge($id_account, $since = "")
+    {
+        global $database;
+        
+        if( empty($since) )
+        {
+            $query = "delete from {$this->table_name} where id_sender = '$id_account'";
+        }
+        else
+        {
+            $since = date("Y-m-d H:i:s", strtotime("now - $since"));
+            $query = "delete from {$this->table_name} where id_sender = '$id_account' and sent >= '$since'";
+        }
+        
+        return $database->exec($query);
     }
 }
