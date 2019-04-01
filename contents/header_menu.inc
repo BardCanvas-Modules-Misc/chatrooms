@@ -60,6 +60,7 @@ else
               data-priority='800' style='cursor: pointer'>
             <span class='fa {$this_module->language->icon} fa-fw'></span>
             {$this_module->language->menu_caption}
+            <span class='fa fa-caret-down'></span>
         </span>
         ",
         800
