@@ -96,6 +96,8 @@ class chatroom_message_record extends abstract_record
             $return["sender_email"]
         );
         
+        $return["contents"] = str_replace(array("<br>", "<br/>", "<br />"), "\n", $return["contents"]);
+        
         foreach( $return as $key => &$val )
             if( is_string($val) )
                 $val = addslashes($val);
@@ -114,6 +116,7 @@ class chatroom_message_record extends abstract_record
         );
         
         $contents = convert_emojis($contents);
+        $contents = nl2br($contents);
         
         return $contents;
     }
