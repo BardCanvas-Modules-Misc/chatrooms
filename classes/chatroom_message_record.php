@@ -2,6 +2,7 @@
 namespace hng2_modules\chatrooms;
 
 use hng2_repository\abstract_record;
+use phpQuery;
 
 class chatroom_message_record extends abstract_record
 {
@@ -100,5 +101,49 @@ class chatroom_message_record extends abstract_record
                 $val = addslashes($val);
         
         return (object) $return;
+    }
+    
+    public function get_processed_content()
+    {
+        $contents = $this->contents;
+    
+        $contents = preg_replace(
+            '@\b(https?://([-\w\.]+[-\w])+(:\d+)?(/([\%\w/_\.#-]*(\?\S+)?[^\.\s])?)?)\b@',
+            '<a href="$1" target="_blank">$1</a>',
+            $contents
+        );
+        
+        $contents = convert_emojis($contents);
+        
+        return $contents;
+    }
+    
+    public function extract_links($content)
+    {
+        global $config;
+        
+        $config->globals["@chatrooms:extracted_urls"] = array();
+        
+        if( ! class_exists('phpQuery') ) include_once(ROOTPATH . "/lib/phpQuery-onefile.php");
+        $pq = phpQuery::newDocument($content);
+        $pq->find('a')->each(function($element)
+        {
+            global $config;
+            
+            $tag = pq($element);
+            $src = trim($tag->attr('href'));
+            if( empty($src) ) return;
+            
+            if( preg_match('/^http:|https:/i', $src) )
+                $config->globals["@chatrooms:extracted_urls"][] = $src;
+        });
+        
+        $links = $config->globals["@chatrooms:extracted_urls"];
+        foreach($links as $key => $link)
+            if( stristr($link, "://{$_SERVER["HTTP_HOST"]}") !== false )
+                unset($links[$key]);
+        reset($links);
+        
+        return $links;
     }
 }
