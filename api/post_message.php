@@ -53,7 +53,9 @@ if( $account->level < $chat->min_level )
 $message = new chatroom_message_record(array(
     "chat_name" => $_POST["chat"],
     "id_sender" => $account->id_account,
-    "contents"  => trim(stripslashes($_POST["message"])),
+    "contents"  => strip_tags(trim(stripslashes($_POST["message"])),
+        $account->level >= $config::MODERATOR_USER_LEVEL ? "<b><i><big><small><sup><sub><code><br>" : "<br>"
+    ),
 ));
 
 #
