@@ -1,6 +1,12 @@
 
 # Chatrooms Module Change Log
 
+## [1.1.0] - 2019-03-31
+
+- Changed menu entries to open in new windows.
+- Added mobile detection on category injected chats.
+- Fixed issue with submenu triggers caused on category injected chat initialization.
+
 ## [1.0.0] - 2019-03-31
 
 - Added settings to inject chats on category pages.
