@@ -418,7 +418,6 @@ var chatroom = {
         
         if( response.data.length > 0 ) ion.sound.play("pop_cork");
         if( response.data.length > 0 ) $container.scrollTo('max');
-        if( response.data.length > 0 ) prepare_submenus();
         chatroom.__firstRun = false;
     },
     
@@ -483,7 +482,12 @@ var chatroom = {
         
         var $item = $( chatroom.__getTemplate('chat_message', item) );
         $item.find('img').load(function() { $container.scrollTo('max'); });
-        
+        $item.find('.is_submenu_trigger').click(function(event) {
+            var $self = $(this);
+            event.stopPropagation();
+            toggle_dropdown_menu( $self );
+        });
+        $item.find('.is_submenu_trigger').attr('data-already-processed', true);
         return $item;
     },
     
