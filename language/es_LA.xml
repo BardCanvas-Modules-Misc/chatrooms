@@ -164,6 +164,27 @@
             {$user} ha purgado las últimas 24 horas de mensajes enviados por {$author} en {$chat}.
             {$count} mensajes han sido borrados.
         ]]></messages_purged>
+        
+        <user_submitted_links><![CDATA[
+            {$user} ha enviado un mensaje a <a href="{$link}" target="_blank">{$chat}</a>
+            que contiene los siguientes vínculos:<br>
+            {$links}<br>
+            Por favor toma las acciones pertinentes si los vínculos son no deseados.
+        ]]></user_submitted_links>
+        <user_attempted_links><![CDATA[
+            {$user} ha intentado enviar un mensaje a <a href="{$link}" target="_blank">{$chat}</a>
+            que contiene los siguientes vínculos:<br>
+            {$links}<br>
+            El mensaje ha sido automáticamente rechazado.
+        ]]></user_attempted_links>
+        <no_links_allowed>Lo sentimos, pero no se permiten vínculos externos</no_links_allowed>
+        <attempting_to_submit_links>Estás intentando enviar más vínculos externos a los permitidos por este sistema</attempting_to_submit_links>
+        <greylist_notification_for_mods><![CDATA[
+            {$user} ha enviado un mensaje en el chat {$chat},
+            pero ha coincidido con la <b>Lista gris</b> en los siguientes casos:<br>
+            <code>{$list}</code>.<br>
+            Por favor <a href="{$link}" target="_blank">abre el chat</a> y toma las acciones pertinentes.
+        ]]></greylist_notification_for_mods>
     </messages>
     
     <settings_data allow_admin_level="240">
@@ -216,6 +237,66 @@
             <type>yes/no</type>
         </specs>
         
-    </settings_data>
+        <specs is_separator="true">Moderación</specs>
+        
+        <specs key="permitted_links">
+            <title><![CDATA[
+                <span class="framed_content inlined state_highlight">
+                    Censura
+                </span>
+                Vínculos externos permitidos por mensaje
+            ]]></title>
+            <description><![CDATA[
+                Introduce la cantidad de vínculos externos que pueden enviarse en un mensaje antes de rechazarlo.<br>
+                Valor predeterminado: <b>2</b>. Establece a <code>-1</code> para desactivar este chequeo.
+            ]]></description>
+            <type>number</type>
+        </specs>
+        
+        <specs key="always_notify_link_submissions">
+            <title><![CDATA[
+                <span class="framed_content inlined state_highlight">
+                    Censura
+                </span>
+                ¿Notificar siempre envío de vínculos externos?
+            ]]></title>
+            <description><![CDATA[
+                De habilitarse, todos los moderadores recibirán notificaciones cuando
+                se envíen vínculos externos en cualquier chat, incluso si el chequeo de vínculos
+                permitidos está desactivado.
+            ]]></description>
+            <type>yes/no</type>
+        </specs>
+        
+        <specs key="enforce_blacklist" required_modules="moderation">
+            <title><![CDATA[
+                <span class="framed_content inlined state_highlight">
+                    Censura
+                </span>
+                Imponer el uso de la lista negra de moderación
+            ]]></title>
+            <description><![CDATA[
+                Cuando un mensaje contenga palabras de la <b>lista negra</b> del módulo de moderación,
+                aplicarle un strike e impedir el envío del mensaje.<br>
+                Cuando un usuario acumule tres strikes, se banea por un día.
+            ]]></description>
+            <type>boolean</type>
+        </specs>
+        
+        <specs key="enforce_greylist" required_modules="moderation">
+            <title><![CDATA[
+                <span class="framed_content inlined state_highlight">
+                    Censura
+                </span>
+                Imponer el uso de la lista gris de moderación
+            ]]></title>
+            <description><![CDATA[
+                Cuando un mensaje contenga palabras de la <b>lista gris</b> del módulo de moderación,
+                el mensaje es rechazado sin consecuencias posteriores para el remitente.
+            ]]></description>
+            <type>boolean</type>
+        </specs>
+        
+</settings_data>
     
 </language>

@@ -169,6 +169,27 @@
             {$user} has purged the last 24 hours of messages submitted by {$author} on {$chat}.
             {$count} messages have been deleted.
         ]]></messages_purged>
+        
+        <user_submitted_links><![CDATA[
+            {$user} has submitted a message on <a href="{$link}" target="_blank">{$chat}</a>
+            that contains the next URLs:<br>
+            {$links}<br>
+            Please take the proper actions if the links are spam.
+        ]]></user_submitted_links>
+        <user_attempted_links><![CDATA[
+            {$user} has attempted to submit a message on <a href="{$link}" target="_blank">{$chat}</a>
+            that contains links to the next URLs:<br>
+            {$links}<br>
+            The message has been rejected automatically.
+        ]]></user_attempted_links>
+        <no_links_allowed>Sorry, but no external links are allowed in messages</no_links_allowed>
+        <attempting_to_submit_links>You're attempting to send more external links than those allowed by this system</attempting_to_submit_links>
+        <greylist_notification_for_mods><![CDATA[
+            {$user} has submitted a message on the {$chat} chat,
+            but it hit the <b>Greylist</b> on the next entries:<br>
+            <code>{$list}</code>.<br>
+            Please <a href="{$link}" target="_blank">open the chat</a> and take the proper measures.
+        ]]></greylist_notification_for_mods>
     </messages>
     
     <settings_data allow_admin_level="240">
@@ -219,6 +240,65 @@
                 If more chats are available for the user, they will be shown as a submenu.
             ]]></description>
             <type>yes/no</type>
+        </specs>
+        
+        <specs is_separator="true">Moderation</specs>
+        
+        <specs key="permitted_links">
+            <title><![CDATA[
+                <span class="framed_content inlined state_highlight">
+                    Censorship
+                </span>
+                External links permitted per message
+            ]]></title>
+            <description><![CDATA[
+                Enter the amount of external links that can be sent in a message before rejecting it.<br>
+                Default value: <b>2</b>. Set to <code>-1</code> to disable this check.
+            ]]></description>
+            <type>number</type>
+        </specs>
+        
+        <specs key="always_notify_link_submissions">
+            <title><![CDATA[
+                <span class="framed_content inlined state_highlight">
+                    Censorship
+                </span>
+                Notify external link submissions always?
+            ]]></title>
+            <description><![CDATA[
+                If enabled, all moderators will receive notifications when external links are submitted
+                on any chat, even if the permitted links check is disabled.
+            ]]></description>
+            <type>yes/no</type>
+        </specs>
+        
+        <specs key="enforce_blacklist" required_modules="moderation">
+            <title><![CDATA[
+                <span class="framed_content inlined state_highlight">
+                    Censorship
+                </span>
+                Enforce usage of moderation black list
+            ]]></title>
+            <description><![CDATA[
+                When a message contains words found in the moderation module's <b>black</b> list,
+                score a strike to the user and avoid the delivery of the message.<br>
+                When a user scores three strikes, is banned for for one day.
+            ]]></description>
+            <type>boolean</type>
+        </specs>
+        
+        <specs key="enforce_greylist" required_modules="moderation">
+            <title><![CDATA[
+                <span class="framed_content inlined state_highlight">
+                    Censorship
+                </span>
+                Enforce usage of moderation grey list
+            ]]></title>
+            <description><![CDATA[
+                When a message contains words found in the moderation module's <b>grey</b> list,
+                message is rejected with no further consequences for the sender.
+            ]]></description>
+            <type>boolean</type>
         </specs>
         
     </settings_data>
