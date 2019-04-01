@@ -105,7 +105,7 @@ class chatroom_messages_repository extends abstract_repository
                 continue;
             }
             
-            $row->contents = convert_emojis($row->contents);
+            $row->contents = $row->get_processed_content();
         }
         
         reset($rows);
