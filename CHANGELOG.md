@@ -1,6 +1,12 @@
 
 # Chatrooms Module Change Log
 
+## [1.2.0] - 2019-03-31
+
+- Added deletion of single messages and user based 24h purge.
+- Implemented moderation support.
+- Added message content restrictions and improved newline management.
+
 ## [1.1.0] - 2019-03-31
 
 - Changed menu entries to open in new windows.
