@@ -1,6 +1,11 @@
 
 # Chatrooms Module Change Log
 
+## [1.3.0] - 2019-04-03
+
+- Increased heartbit to 5 seconds.
+- Added user color selector.
+
 ## [1.2.0] - 2019-03-31
 
 - Added deletion of single messages and user based 24h purge.
