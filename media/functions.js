@@ -2,8 +2,8 @@
 var chatroom = {
     
     script         : '',
-    updateInterval : 2 * 1000,
-    timeout        : 4 * 1000,
+    updateInterval : 5  * 1000,
+    timeout        : 20 * 1000,
     
     /**
      * @type {jQuery}
