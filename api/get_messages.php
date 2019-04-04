@@ -21,7 +21,7 @@
  *                }
  */
 
-use hng2_base\accounts_repository;
+use hng2_modules\chatrooms\accounts_repository_extender;
 use hng2_modules\chatrooms\chatroom_messages_repository;
 
 include "../../config.php";
@@ -86,23 +86,29 @@ if( ! empty($rows) )
     $row = current($rows);
     $lts = $row->sent;
     $rows = array_reverse($rows);
-    reset($rows);
     
     $aids = array();
     foreach($rows as $row) $aids[] = $row->id_sender;
-    reset($rows);
+    $aids = array_unique($aids);
     
     # Banned users flagging
-    $arepo = new accounts_repository();
-    $prefs = $arepo->get_multiple_engine_prefs($aids, "@chatrooms:{$_GET["chat"]}.banned_until");
+    $arepo = new accounts_repository_extender();
+    $prefs  = $arepo->get_multiple_engine_prefs($aids, "@chatrooms:{$_GET["chat"]}.banned_until");
+    $colors = $arepo->get_multiple_engine_prefs($aids, "@chatrooms:default_color");
+    if( ! empty($colors) )
+    {
+        foreach($rows as $key => $row)
+            if( isset($colors[$row->id_sender]) )
+                $rows[$key]->_color = $colors[$row->id_sender];
+    }
     if( ! empty($prefs) )
     {
-        foreach($rows as &$row)
+        foreach($rows as $key => $row)
         {
             if( empty($prefs[$row->id_sender]) ) continue;
             if( date("Y-m-d H:i:s") > $prefs[$row->id_sender] ) continue;
             
-            $row->_sender_is_banned = true;
+            $rows[$key]->_sender_is_banned = true;
         }
     }
     
@@ -113,9 +119,10 @@ if( ! empty($rows) )
         
         foreach($rows as $row)
             if( $row->sent >= $boundary && ! $row->_sender_is_banned && $row->id_sender != $account->id_account )
-                $active_users[] = "<a class='user_display_name' data-user-level='{$row->sender_level}'
-                                      href='{$config->full_root_path}/user/{$row->sender_user_name}'><i 
-                                      class='fa fa-user fa-fw'></i>{$row->sender_display_name}</a>";
+                $active_users[$row->sender_display_name]
+                    = "<a class='user_display_name' data-user-level='{$row->sender_level}'
+                          href='{$config->full_root_path}/user/{$row->sender_user_name}'><i 
+                          class='fa fa-user fa-fw'></i>{$row->sender_display_name}</a>";
     }
 }
 
@@ -124,7 +131,7 @@ $meta = (object) array(
     "last_message_timestamp" => $lts,
 );
 
-if( empty($_GET["since"]) && ! empty($active_users) ) $meta->active_users = $active_users;
+if( empty($_GET["since"]) && ! empty($active_users) ) $meta->active_users = array_values($active_users);
 
 if( $account->level >= $config::MODERATOR_USER_LEVEL )
 {

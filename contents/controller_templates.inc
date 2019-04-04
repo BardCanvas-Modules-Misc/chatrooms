@@ -81,6 +81,28 @@
     
 </div>
 
+<div id="chatroom_color_picker" style="display: none"
+     title="<?= $this_module->language->colors->dialog_title ?>">
+    <div style="display: flex; flex-wrap: wrap; align-items: stretch; justify-content: stretch;">
+        <?
+        $index = 0;
+        if( empty($account->engine_prefs["@chatrooms:default_color"]) )
+            $account->engine_prefs["@chatrooms:default_color"] = "";
+        foreach($this_module->language->colors->color as $color)
+        {
+            $selected = $account->engine_prefs["@chatrooms:default_color"] == trim($color["key"]) ? "selected" : "";
+            echo "
+                <div class='chat_color_picker {$color["key"]} {$selected}' data-color='{$color["key"]}'
+                     onclick=\"chatroom.__setColor(this)\">
+                    {$color}
+                </div>
+            ";
+        }
+        ?>
+    </div>
+    
+</div>
+
 <div id="chatroom_messages" style="display: none">
     
     <div class="chat_critical_error"><?= unindent($this_module->language->messages->critical_error) ?></div>
@@ -100,6 +122,7 @@
             <textarea class="expandible_textarea" placeholder="<?= $this_module->language->input_placeholder ?>"></textarea>
             <div class="buttons">
                 <i class="fa send-button fa-paper-plane fa-lg pseudo_link" onclick="chatroom.__sendMessage()"></i>
+                <i class="fa fa-paint-brush fa-lg pseudo_link" style="margin-left: 5px;" onclick="chatroom.__showColorPicker()"></i>
                 <i class="fa fa-image fa-lg pseudo_link" style="margin-left: 5px;" onclick="chatroom.__sendImage()"></i>
             </div>
         </div>
@@ -108,7 +131,7 @@
     
     <template class="chat_message">
         
-        <div class="chat-message {{class}}">
+        <div class="chat-message {{class}}" data-color="{{_color}}">
             <div class="sent"><span class="time">{{time}}</span></div>
             <div class="arrow left"><span class="tip"></span></div>
             <div class="message" data-message-id="{{message_id}}">

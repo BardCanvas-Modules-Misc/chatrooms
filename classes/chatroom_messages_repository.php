@@ -1,7 +1,6 @@
 <?php
 namespace hng2_modules\chatrooms;
 
-use hng2_base\accounts_repository;
 use hng2_repository\abstract_repository;
 
 class chatroom_messages_repository extends abstract_repository
@@ -161,7 +160,7 @@ class chatroom_messages_repository extends abstract_repository
         foreach($rows as $row) $aids[] = $row->id_sender;
         reset($rows);
         
-        $arepo = new accounts_repository();
+        $arepo = new accounts_repository_extender();
         $prefs = $arepo->get_multiple_engine_prefs($aids, "@chatrooms:{$chat_name}.banned_until");
         foreach($rows as $row)
         {

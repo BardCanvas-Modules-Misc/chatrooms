@@ -70,6 +70,38 @@
         Please be nice and enjoy the conversation!
     ]]></welcome_banner>
     
+    <colors>
+        <dialog_title>Pick a color for your messages</dialog_title>
+        <color key="">Default</color>
+        <color key="pink1">Pink 1</color>
+        <color key="pink2">Pink 2</color>
+        <color key="pink3">Pink 3</color>
+        <color key="red1">Red 1</color>
+        <color key="red2">Red 2</color>
+        <color key="red3">Red 3</color>
+        <color key="orange1">Orange 1</color>
+        <color key="orange2">Orange 2</color>
+        <color key="orange3">Orange 3</color>
+        <color key="orange4">Orange 4</color>
+        <color key="yellow1">Yellow 1</color>
+        <color key="yellow2">Yellow 2</color>
+        <color key="yellow3">Yellow 3</color>
+        <color key="yellow4">Yellow 4</color>
+        <color key="blue1">Blue 1</color>
+        <color key="blue2">Blue 2</color>
+        <color key="blue3">Blue 3</color>
+        <color key="blue4">Blue 4</color>
+        <color key="indigo1">Indigo 1</color>
+        <color key="indigo2">Indigo 2</color>
+        <color key="violet1">Violet 1</color>
+        <color key="violet2">Violet 2</color>
+        <color key="violet3">Violet 3</color>
+        <color key="grey1">Grey 1</color>
+        <color key="grey2">Grey 2</color>
+        <color key="grey3">Grey 3</color>
+        <color key="grey4">Grey 4</color>
+    </colors>
+    
     <messages>
         <cannot_create_images_directory>Cannot create images directory! The data directory isn't writable. Please notify the tech support staff.</cannot_create_images_directory>
         <cannot_create_directory>Cannot create container {$dir} in images directory! Please inform the tech support staff.</cannot_create_directory>

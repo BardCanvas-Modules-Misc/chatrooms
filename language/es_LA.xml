@@ -70,6 +70,38 @@
         Se buena gente y ¡disfruta de la plática!
     ]]></welcome_banner>
     
+    <colors>
+        <dialog_title>Elige el color de tus mensajes</dialog_title>
+        <color key="">Predeterminado</color>
+        <color key="pink1">Rosa 1</color>
+        <color key="pink2">Rosa 2</color>
+        <color key="pink3">Rosa 3</color>
+        <color key="red1">Rojo 1</color>
+        <color key="red2">Rojo 2</color>
+        <color key="red3">Rojo 3</color>
+        <color key="orange1">Naranja 1</color>
+        <color key="orange2">Naranja 2</color>
+        <color key="orange3">Naranja 3</color>
+        <color key="orange4">Naranja 4</color>
+        <color key="yellow1">Amarillo 1</color>
+        <color key="yellow2">Amarillo 2</color>
+        <color key="yellow3">Amarillo 3</color>
+        <color key="yellow4">Amarillo 4</color>
+        <color key="blue1">Azul 1</color>
+        <color key="blue2">Azul 2</color>
+        <color key="blue3">Azul 3</color>
+        <color key="blue4">Azul 4</color>
+        <color key="indigo1">Indigo 1</color>
+        <color key="indigo2">Indigo 2</color>
+        <color key="violet1">Violeta 1</color>
+        <color key="violet2">Violeta 2</color>
+        <color key="violet3">Violeta 3</color>
+        <color key="grey1">Gris 1</color>
+        <color key="grey2">Gris 2</color>
+        <color key="grey3">Gris 3</color>
+        <color key="grey4">Gris 4</color>
+    </colors>
+    
     <messages>
         <cannot_create_images_directory>¡No se puede crear el directorio de imágenes! El directorio de datos no es escribible. Por favor informa al personal de soporte.</cannot_create_images_directory>
         <cannot_create_directory>¡No se puede crear el contenedor {$dir} en el directorio de imágenes! Por favor informa al personal de soporte.</cannot_create_directory>

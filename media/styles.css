@@ -166,7 +166,7 @@ body[data-chatroom-name] .chatroom .target {
 
 .chatroom .target .input textarea {
     padding-right: 28px;
-    width: calc(100% - 24px);
+    width: calc(100% - 48px);
     min-height: 22px;
 }
 
@@ -188,7 +188,7 @@ body[data-chatroom-name] .chatroom .target {
 .chatroom .target .messages .chat-message.incoming .sent        { order: 3; padding-left: 4px; }
 .chatroom .target .messages .chat-message.incoming .arrow.right { order: 4; flex-grow: 1; }
 
-.chatroom .target .messages .chat-message.incoming .message {
+.chat_color_picker, .chatroom .target .messages .chat-message.incoming .message {
     background-color: #e6e9ed; border-color: dimgrey;
 }
 
@@ -231,3 +231,166 @@ body[data-chatroom-name] .chatroom .target {
 
 .chatroom .target .messages .chat-message.outgoing .is_submenu_trigger { display: none; }
 #chatroom_actions_menu .main_menu_item { cursor: pointer; }
+
+/* Colored */
+
+.chat_color_picker {
+    display: block; width: calc(25% - 10px); padding: 5px; margin: 5px; border-width: 1px;
+    border-style: solid; border-radius: 2px; text-align: center; overflow: hidden;
+    text-overflow: ellipsis; font-size: 10pt; line-height: 14pt; cursor: pointer;
+}
+
+.chat_color_picker:hover    { text-decoration: underline; }
+.chat_color_picker.selected { font-weight: bold; font-size: 12pt; }
+
+.chat_color_picker.pink1,
+.chatroom .target .messages .chat-message[data-color="pink1"] .message { color: hotpink; background-color: #FFEFF2; border-color: hotpink; }
+.chatroom .target .messages .chat-message[data-color="pink1"].incoming .arrow.left  .tip { border-right-color: hotpink; }
+.chatroom .target .messages .chat-message[data-color="pink1"].outgoing .arrow.right .tip { border-left-color: hotpink; }
+
+.chat_color_picker.pink2,
+.chatroom .target .messages .chat-message[data-color="pink2"] .message { color: #e1147c; background-color: #FBDFFB; border-color: #e1147c; }
+.chatroom .target .messages .chat-message[data-color="pink2"].incoming .arrow.left  .tip { border-right-color: #e1147c; }
+.chatroom .target .messages .chat-message[data-color="pink2"].outgoing .arrow.right .tip { border-left-color: #e1147c; }
+.chat_color_picker.pink3, 
+.chatroom .target .messages .chat-message[data-color="pink3"] .message { color: #FFEFF2; background-color: #e1147c; border-color: hotpink; }
+.chatroom .target .messages .chat-message[data-color="pink3"].incoming .arrow.left  .tip { border-right-color: hotpink; }
+.chatroom .target .messages .chat-message[data-color="pink4"].outgoing .arrow.right .tip { border-left-color: hotpink; }
+
+.chat_color_picker.red1, 
+.chatroom .target .messages .chat-message[data-color="red1"] .message { color: indianred; background-color: #FFE4E4; border-color: indianred; }
+.chatroom .target .messages .chat-message[data-color="red1"].incoming .arrow.left  .tip { border-right-color: indianred; }
+.chatroom .target .messages .chat-message[data-color="red1"].outgoing .arrow.right .tip { border-left-color: indianred; }
+
+.chat_color_picker.red2, 
+.chatroom .target .messages .chat-message[data-color="red2"] .message { color: darkred; background-color: #FFE3E3; border-color: darkred; }
+.chatroom .target .messages .chat-message[data-color="red2"].incoming .arrow.left  .tip { border-right-color: darkred; }
+.chatroom .target .messages .chat-message[data-color="red2"].outgoing .arrow.right .tip { border-left-color: darkred; }
+
+.chat_color_picker.red3, 
+.chatroom .target .messages .chat-message[data-color="red3"] .message { color: #FFE3E3; background-color: #df0000; border-color: darkred; }
+.chatroom .target .messages .chat-message[data-color="red3"].incoming .arrow.left  .tip { border-right-color: darkred; }
+.chatroom .target .messages .chat-message[data-color="red3"].outgoing .arrow.right .tip { border-left-color: darkred; }
+.chatroom .target .messages .chat-message[data-color="red3"] .message .author_info { color: white }
+.chatroom .target .messages .chat-message[data-color="red3"] .message .pseudo_link { color: white }
+
+.chat_color_picker.orange1, 
+.chatroom .target .messages .chat-message[data-color="orange1"] .message { color: darkorange; background-color: #FFF6E5; border-color: darkorange; }
+.chatroom .target .messages .chat-message[data-color="orange1"].incoming .arrow.left  .tip { border-right-color: darkorange; }
+.chatroom .target .messages .chat-message[data-color="orange1"].outgoing .arrow.right .tip { border-left-color: darkorange; }
+
+.chat_color_picker.orange2, 
+.chatroom .target .messages .chat-message[data-color="orange2"] .message { color: darkorange; background-color: #FFFFCB; border-color: darkorange; }
+.chatroom .target .messages .chat-message[data-color="orange2"].incoming .arrow.left  .tip { border-right-color: darkorange; }
+.chatroom .target .messages .chat-message[data-color="orange2"].outgoing .arrow.right .tip { border-left-color: darkorange; }
+
+.chat_color_picker.orange3, 
+.chatroom .target .messages .chat-message[data-color="orange3"] .message { color: orangered; background-color: #FFF5E4; border-color: orangered; }
+.chatroom .target .messages .chat-message[data-color="orange3"].incoming .arrow.left  .tip { border-right-color: orangered; }
+.chatroom .target .messages .chat-message[data-color="orange3"].outgoing .arrow.right .tip { border-left-color: orangered; }
+
+.chat_color_picker.orange4, 
+.chatroom .target .messages .chat-message[data-color="orange4"] .message { color: #FFF5E4; background-color: darkorange; border-color: orangered; }
+.chatroom .target .messages .chat-message[data-color="orange4"].incoming .arrow.left  .tip { border-right-color: orangered; }
+.chatroom .target .messages .chat-message[data-color="orange4"].outgoing .arrow.right .tip { border-left-color: orangered; }
+.chatroom .target .messages .chat-message[data-color="orange4"] .message .author_info { color: white }
+.chatroom .target .messages .chat-message[data-color="orange4"] .message .pseudo_link { color: white }
+
+.chat_color_picker.yellow1, 
+.chatroom .target .messages .chat-message[data-color="yellow1"] .message { color: goldenrod; background-color: lightgoldenrodyellow; border-color: goldenrod; }
+.chatroom .target .messages .chat-message[data-color="yellow1"].incoming .arrow.left  .tip { border-right-color: goldenrod; }
+.chatroom .target .messages .chat-message[data-color="yellow1"].outgoing .arrow.right .tip { border-left-color: goldenrod; }
+
+.chat_color_picker.yellow2, 
+.chatroom .target .messages .chat-message[data-color="yellow2"] .message { color: #7f7f00; background-color: lightyellow; border-color: #7f7f00; }
+.chatroom .target .messages .chat-message[data-color="yellow2"].incoming .arrow.left  .tip { border-right-color: #7f7f00; }
+.chatroom .target .messages .chat-message[data-color="yellow2"].outgoing .arrow.right .tip { border-left-color: #7f7f00; }
+
+.chat_color_picker.yellow3, 
+.chatroom .target .messages .chat-message[data-color="yellow3"] .message { color: darkgoldenrod; background-color: #F6F3D4; border-color: darkgoldenrod; }
+.chatroom .target .messages .chat-message[data-color="yellow3"].incoming .arrow.left  .tip { border-right-color: darkgoldenrod; }
+.chatroom .target .messages .chat-message[data-color="yellow3"].outgoing .arrow.right .tip { border-left-color: darkgoldenrod; }
+
+.chat_color_picker.yellow4,
+.chatroom .target .messages .chat-message[data-color="yellow4"] .message { color: lightgoldenrodyellow; background-color: darkgoldenrod; border-color: black; }
+.chatroom .target .messages .chat-message[data-color="yellow4"].incoming .arrow.left  .tip { border-right-color: black; }
+.chatroom .target .messages .chat-message[data-color="yellow4"].outgoing .arrow.right .tip { border-left-color: black; }
+.chatroom .target .messages .chat-message[data-color="yellow4"] .message .author_info { color: white }
+.chatroom .target .messages .chat-message[data-color="yellow4"] .message .pseudo_link { color: white }
+
+.chat_color_picker.blue1, 
+.chatroom .target .messages .chat-message[data-color="blue1"] .message { color: mediumblue; background-color: #E6F5FE; border-color: mediumblue; }
+.chatroom .target .messages .chat-message[data-color="blue1"].incoming .arrow.left  .tip { border-right-color: mediumblue; }
+.chatroom .target .messages .chat-message[data-color="blue1"].outgoing .arrow.right .tip { border-left-color: mediumblue; }
+
+.chat_color_picker.blue2, 
+.chatroom .target .messages .chat-message[data-color="blue2"] .message { color: dodgerblue; background-color: lightcyan; border-color: dodgerblue; }
+.chatroom .target .messages .chat-message[data-color="blue2"].incoming .arrow.left  .tip { border-right-color: dodgerblue; }
+.chatroom .target .messages .chat-message[data-color="blue2"].outgoing .arrow.right .tip { border-left-color: dodgerblue; }
+
+.chat_color_picker.blue3, 
+.chatroom .target .messages .chat-message[data-color="blue3"] .message { color: #E6F5FE; background-color: mediumblue; border-color: darkblue; }
+.chatroom .target .messages .chat-message[data-color="blue3"].incoming .arrow.left  .tip { border-right-color: darkblue; }
+.chatroom .target .messages .chat-message[data-color="blue3"].outgoing .arrow.right .tip { border-left-color: darkblue; }
+.chatroom .target .messages .chat-message[data-color="blue3"] .message .author_info { color: white }
+.chatroom .target .messages .chat-message[data-color="blue3"] .message .pseudo_link { color: white }
+
+.chat_color_picker.blue4, 
+.chatroom .target .messages .chat-message[data-color="blue4"] .message { color: lightcyan; background-color: cornflowerblue; border-color: deepskyblue; }
+.chatroom .target .messages .chat-message[data-color="blue4"].incoming .arrow.left  .tip { border-right-color: deepskyblue; }
+.chatroom .target .messages .chat-message[data-color="blue4"].outgoing .arrow.right .tip { border-left-color: deepskyblue; }
+.chatroom .target .messages .chat-message[data-color="blue4"] .message .author_info { color: white }
+.chatroom .target .messages .chat-message[data-color="blue4"] .message .pseudo_link { color: white }
+
+.chat_color_picker.indigo1, 
+.chatroom .target .messages .chat-message[data-color="indigo1"] .message { color: navy; background-color: aliceblue; border-color: navy; }
+.chatroom .target .messages .chat-message[data-color="indigo1"].incoming .arrow.left  .tip { border-right-color: navy; }
+.chatroom .target .messages .chat-message[data-color="indigo1"].outgoing .arrow.right .tip { border-left-color: navy; }
+
+.chat_color_picker.indigo2, 
+.chatroom .target .messages .chat-message[data-color="indigo2"] .message { color: aliceblue; background-color: navy; border-color: mediumblue; }
+.chatroom .target .messages .chat-message[data-color="indigo2"].incoming .arrow.left  .tip { border-right-color: mediumblue; }
+.chatroom .target .messages .chat-message[data-color="indigo2"].outgoing .arrow.right .tip { border-left-color: mediumblue; }
+.chatroom .target .messages .chat-message[data-color="indigo2"] .message .author_info { color: white }
+.chatroom .target .messages .chat-message[data-color="indigo2"] .message .pseudo_link { color: white }
+
+.chat_color_picker.violet1, 
+.chatroom .target .messages .chat-message[data-color="violet1"] .message { color: darkviolet; background-color: #F9F1FD; border-color: darkviolet; }
+.chatroom .target .messages .chat-message[data-color="violet1"].incoming .arrow.left  .tip { border-right-color: darkviolet; }
+.chatroom .target .messages .chat-message[data-color="violet1"].outgoing .arrow.right .tip { border-left-color: darkviolet; }
+
+.chat_color_picker.violet2, 
+.chatroom .target .messages .chat-message[data-color="violet2"] .message { color: darkmagenta; background-color: #FFE3FF; border-color: darkmagenta; }
+.chatroom .target .messages .chat-message[data-color="violet2"].incoming .arrow.left  .tip { border-right-color: darkmagenta; }
+.chatroom .target .messages .chat-message[data-color="violet2"].outgoing .arrow.right .tip { border-left-color: darkmagenta; }
+
+.chat_color_picker.violet3, 
+.chatroom .target .messages .chat-message[data-color="violet3"] .message { color: #F9F1FD; background-color: blueviolet; border-color: purple; }
+.chatroom .target .messages .chat-message[data-color="violet3"].incoming .arrow.left  .tip { border-right-color: purple; }
+.chatroom .target .messages .chat-message[data-color="violet3"].outgoing .arrow.right .tip { border-left-color: purple; }
+.chatroom .target .messages .chat-message[data-color="violet3"] .message .author_info { color: white }
+.chatroom .target .messages .chat-message[data-color="violet3"] .message .pseudo_link { color: white }
+
+.chat_color_picker.grey1, 
+.chatroom .target .messages .chat-message[data-color="grey1"] .message { color: grey; background-color: white; border-color: grey; }
+.chatroom .target .messages .chat-message[data-color="grey1"].incoming .arrow.left  .tip { border-right-color: grey; }
+.chatroom .target .messages .chat-message[data-color="grey1"].outgoing .arrow.right .tip { border-left-color: grey; }
+
+.chat_color_picker.grey2, 
+.chatroom .target .messages .chat-message[data-color="grey2"] .message { color: dimgrey; background-color: #FAFAFA; border-color: dimgrey; }
+.chatroom .target .messages .chat-message[data-color="grey2"].incoming .arrow.left  .tip { border-right-color: dimgrey; }
+.chatroom .target .messages .chat-message[data-color="grey2"].outgoing .arrow.right .tip { border-left-color: dimgrey; }
+
+.chat_color_picker.grey3, 
+.chatroom .target .messages .chat-message[data-color="grey3"] .message { color: ghostwhite; background-color: dimgrey; border-color: black; }
+.chatroom .target .messages .chat-message[data-color="grey3"].incoming .arrow.left  .tip { border-right-color: black; }
+.chatroom .target .messages .chat-message[data-color="grey3"].outgoing .arrow.right .tip { border-left-color: black; }
+.chatroom .target .messages .chat-message[data-color="grey3"] .message .author_info { color: white }
+.chatroom .target .messages .chat-message[data-color="grey3"] .message .pseudo_link { color: white }
+
+.chat_color_picker.grey4, 
+.chatroom .target .messages .chat-message[data-color="grey4"] .message { color: lightgrey; background-color: black; border-color: dimgrey; }
+.chatroom .target .messages .chat-message[data-color="grey4"].incoming .arrow.left  .tip { border-right-color: dimgrey; }
+.chatroom .target .messages .chat-message[data-color="grey4"].outgoing .arrow.right .tip { border-left-color: dimgrey; }
+.chatroom .target .messages .chat-message[data-color="grey4"] .message .author_info { color: white }
+.chatroom .target .messages .chat-message[data-color="grey4"] .message .pseudo_link { color: white }

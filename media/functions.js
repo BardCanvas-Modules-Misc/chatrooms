@@ -755,6 +755,25 @@ var chatroom = {
             }
         });
     },
+    
+    __showColorPicker: function()
+    {
+        show_discardable_dialog('#chatroom_color_picker');
+    },
+    
+    __setColor: function(trigger)
+    {
+        var $trigger = $(trigger);
+        var color    = $trigger.attr('data-color');
+        var $dialog  = $('#chatroom_color_picker');
+        $dialog.find('.chat_color_picker').removeClass('selected');
+        $trigger.addClass('selected');
+        
+        set_engine_pref(
+            '@chatrooms:default_color', color,
+            function() { $('#chatroom_color_picker').dialog('close') }
+        );
+    }
 };
 
 $(document).ready(function() { chatroom.init( $('#chatroom'), $('#chatroom_messages') ); });
