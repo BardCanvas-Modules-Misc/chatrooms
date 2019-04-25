@@ -33,8 +33,9 @@ $tables = array(
 );
 
 $init_settings = array(
-    "modules:chatrooms.chatrooms_registry" => "Lobby | Main chat room | 10",
+    "modules:chatrooms.chatrooms_registry" => "Shoutbox | Main chat room | 10",
     "modules:chatrooms.permitted_links"    => "2",
+    "modules:chatrooms.show_in_menu_bar"   => "true",
 );
 
 if( $module_install_action == "install" )
