@@ -43,7 +43,7 @@ if( count($chatrooms) == 1 )
         <a class='main_menu_item' data-module='chatrooms' href='{$config->full_root_path}/chatroom/{$chat_slug}'
            data-priority='800' target='_blank'>
             <span class='fa fa-window-maximize fa-fw'></span>
-            {$this_module->language->single->menu}
+            {$chat_name}
         </a>
         ",
         800
