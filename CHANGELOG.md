@@ -1,6 +1,11 @@
 
 # Chatrooms Module Change Log
 
+## [1.3.1] - 2019-04-25
+
+- When there's a single chat and it is shown on the menu, the chat's name is shown instead of the generic caption.
+- Changed some installation defaults.
+
 ## [1.3.0] - 2019-04-03
 
 - Increased heartbit to 5 seconds.
