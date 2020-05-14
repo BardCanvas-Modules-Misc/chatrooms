@@ -32,29 +32,43 @@ if( $account->level < $config::NEWCOMER_USER_LEVEL || $account->state != "enable
     # die(json_encode(array("message" => trim($language->errors->access_denied))));
     throw_fake_401();
 
-if( empty($_GET["chat"]) )
+$chat_name = trim(stripslashes($_GET["chat"]));
+$since     = trim(stripslashes($_GET["since"]));
+
+if( empty($chat_name) )
     die(json_encode(array("message" => trim($current_module->language->messages->chat_name_missing))));
+
+if( ! empty($since) && ! strtotime($since) )
+    die(json_encode(array("message" => trim($current_module->language->messages->invalid_timestamp))));
+
+$check = array($chat_name);
+if( ! empty($since) ) $check[] = $since;
+try
+{
+    check_sql_injection($check);
+}
+catch(\Exception $e)
+{
+    die(json_encode(array("message" => $e->getMessage())));
+}
 
 $repository = new chatroom_messages_repository();
 $chats = $repository->get_chatrooms_list();
 
-if( ! isset($chats[$_GET["chat"]]) )
-    die(json_encode(array("message" => sprintf($current_module->language->messages->chat_unexistent, $_GET["chat"]), "chats_registry" => $chats)));
+if( ! isset($chats[$chat_name]) )
+    die(json_encode(array("message" => sprintf($current_module->language->messages->chat_unexistent, $chat_name), "chats_registry" => $chats)));
 
-$chat = $chats[$_GET["chat"]];
+$chat = $chats[$chat_name];
 if( $account->level < $chat->min_level )
     # die(json_encode(array("message" => trim($language->errors->access_denied))));
     throw_fake_401();
 
-if( ! empty($_GET["since"]) && ! strtotime($_GET["since"]) )
-    die(json_encode(array("message" => trim($current_module->language->messages->invalid_timestamp))));
-
-$banned_until = $account->engine_prefs["@chatrooms:{$_GET["chat"]}.banned_until"];
+$banned_until = $account->engine_prefs["@chatrooms:{$chat_name}.banned_until"];
 if( ! empty($banned_until) )
 {
     if( date("Y-m-d H:i:s") >= $banned_until )
     {
-        $account->set_engine_pref("@chatrooms:{$_GET["chat"]}.banned_until", "");
+        $account->set_engine_pref("@chatrooms:{$chat_name}.banned_until", "");
     }
     else
     {
@@ -62,7 +76,7 @@ if( ! empty($banned_until) )
             "message" => "OK",
             "data"    => array(),
             "meta"    => array(
-                "since"                  => $_GET["since"],
+                "since"                  => $since,
                 "last_message_timestamp" => "",
                 "warns"                  => array(replace_escaped_objects(
                     $current_module->language->messages->banned_until,
@@ -74,8 +88,8 @@ if( ! empty($banned_until) )
     }
 }
 
-$since = empty($_GET["since"]) ? date("Y-m-d H:i:s", strtotime("now - 24 hours")) : $_GET["since"];
-$filter = array("chat_name = '{$_GET["chat"]}'", "sent > '$since'");
+$since = empty($since) ? date("Y-m-d H:i:s", strtotime("now - 24 hours")) : $since;
+$filter = array("chat_name = '{$chat_name}'", "sent > '$since'");
 $rows   = $repository->find($filter, 0, 0, "sent desc");
 
 $active_users = array();
@@ -93,7 +107,7 @@ if( ! empty($rows) )
     
     # Banned users flagging
     $arepo = new accounts_repository_extender();
-    $prefs  = $arepo->get_multiple_engine_prefs($aids, "@chatrooms:{$_GET["chat"]}.banned_until");
+    $prefs  = $arepo->get_multiple_engine_prefs($aids, "@chatrooms:{$chat_name}.banned_until");
     $colors = $arepo->get_multiple_engine_prefs($aids, "@chatrooms:default_color");
     if( ! empty($colors) )
     {
@@ -113,7 +127,7 @@ if( ! empty($rows) )
     }
     
     # Greeting with chatting users list
-    if( empty($_GET["since"]) )
+    if( empty($since) )
     {
         $boundary = date("Y-m-d H:i:s", strtotime("now - 5 minutes"));
         
@@ -127,18 +141,18 @@ if( ! empty($rows) )
 }
 
 $meta = (object) array(
-    "since"                  => $_GET["since"],
+    "since"                  => $since,
     "last_message_timestamp" => $lts,
 );
 
-if( empty($_GET["since"]) && ! empty($active_users) ) $meta->active_users = array_values($active_users);
+if( empty($since) && ! empty($active_users) ) $meta->active_users = array_values($active_users);
 
 if( $account->level >= $config::MODERATOR_USER_LEVEL )
 {
     $warns = array();
     foreach($account->engine_prefs as $key => $val)
     {
-        if( ! stristr($key, "@chatrooms:{$_GET["chat"]}.report/") ) continue;
+        if( ! stristr($key, "@chatrooms:{$chat_name}.report/") ) continue;
         if( empty($val) ) continue;
         
         $warns[] = $val;
