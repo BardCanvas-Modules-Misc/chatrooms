@@ -50,6 +50,15 @@ if( $_POST["action"] == "ban" && $_POST["window"] > 999 )
 if( $_POST["action"] == "delete_this" && ! is_numeric($_POST["message_id"]) )
     die( $current_module->language->messages->invalid_message_id );
 
+try
+{
+    check_sql_injection($_POST);
+}
+catch(\Exception $e)
+{
+    die($e->getMessage());
+}
+
 $target = new account($_POST["user_id"]);
 
 if( ! $target->_exists ) die( $current_module->language->messages->user_not_found );
