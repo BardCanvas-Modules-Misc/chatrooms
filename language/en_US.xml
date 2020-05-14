@@ -113,6 +113,7 @@
         <chat_name_missing>Chat name missing</chat_name_missing>
         <chat_unexistent>Sorry, but the chat '%s' is not registered</chat_unexistent>
         <invalid_timestamp>The timestamp provided isn't valid</invalid_timestamp>
+        <empty_message>Please type a message to send.</empty_message>
         
         <critical_error><![CDATA[
             There's been an error trying to fetch messages:<br>

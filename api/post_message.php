@@ -25,14 +25,29 @@ if( $account->level < $config::NEWCOMER_USER_LEVEL || $account->state != "enable
     # die(json_encode(array("message" => trim($language->errors->access_denied))));
     throw_fake_401();
 
-if( empty($_POST["chat"]) )
+$chat_name = trim(stripslashes($_POST["chat"]));
+$raw_messg = trim(stripslashes($_POST["message"]));
+
+if( empty($chat_name) )
     die(json_encode(array("message" => trim($current_module->language->messages->chat_name_missing))));
 
-$banned_until = $account->engine_prefs["@chatrooms:{$_POST["chat"]}.banned_until"];
+if( empty($raw_messg) )
+    die(json_encode(array("message" => trim($current_module->language->messages->empty_message))));
+
+try
+{
+    check_sql_injection(array($chat_name, $raw_messg));
+}
+catch(\Exception $e)
+{
+    die(json_encode(array("message" => $e->getMessage())));
+}
+
+$banned_until = $account->engine_prefs["@chatrooms:{$chat_name}.banned_until"];
 if( ! empty($banned_until) )
 {
     if( date("Y-m-d H:i:s") >= $banned_until )
-        $account->set_engine_pref("@chatrooms:{$_POST["chat"]}.banned_until", "");
+        $account->set_engine_pref("@chatrooms:{$chat_name}.banned_until", "");
     else
         die(replace_escaped_objects($current_module->language->messages->banned_until, array(
             '{$time}' => current(explode(" ", time_remaining_string($banned_until)))
@@ -42,20 +57,18 @@ if( ! empty($banned_until) )
 $repository = new chatroom_messages_repository();
 $chats = $repository->get_chatrooms_list();
 
-if( ! isset($chats[$_POST["chat"]]) )
-    # die(json_encode(array("message" => sprintf($current_module->language->messages->chat_unexistent, $_POST["chat"]))));
+if( ! isset($chats[$chat_name]) )
+    # die(json_encode(array("message" => sprintf($current_module->language->messages->chat_unexistent, $chat_name))));
     throw_fake_401();
 
-$chat = $chats[$_POST["chat"]];
+$chat = $chats[$chat_name];
 if( $account->level < $chat->min_level )
     die(json_encode(array("message" => trim($language->errors->access_denied))));
 
 $message = new chatroom_message_record(array(
-    "chat_name" => $_POST["chat"],
+    "chat_name" => $chat_name,
     "id_sender" => $account->id_account,
-    "contents"  => strip_tags(trim(stripslashes($_POST["message"])),
-        $account->level >= $config::MODERATOR_USER_LEVEL ? "<b><i><big><small><sup><sub><code><br>" : "<br>"
-    ),
+    "contents"  => strip_tags($raw_messg,"<b><i><big><small><sup><sub><code><br>"),
 ));
 
 #
