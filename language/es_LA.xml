@@ -308,9 +308,7 @@
                 Imponer el uso de la lista negra de moderación
             ]]></title>
             <description><![CDATA[
-                Cuando un mensaje contenga palabras de la <b>lista negra</b> del módulo de moderación,
-                aplicarle un strike e impedir el envío del mensaje.<br>
-                Cuando un usuario acumule tres strikes, se banea por un día.
+                Rechaza un mensaje cuando contenga palabras de la <b>lista negra</b> del módulo de moderación.
             ]]></description>
             <type>boolean</type>
         </specs>
@@ -324,7 +322,7 @@
             ]]></title>
             <description><![CDATA[
                 Cuando un mensaje contenga palabras de la <b>lista gris</b> del módulo de moderación,
-                el mensaje es rechazado sin consecuencias posteriores para el remitente.
+                las palabras son reemplazadas por un "beep".
             ]]></description>
             <type>boolean</type>
         </specs>

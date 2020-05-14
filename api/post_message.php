@@ -179,13 +179,14 @@ if( isset($modules["moderation"]) && $modules["moderation"]->enabled )
         $detected = $toolbox->probe_in_words_list($message->contents, "words_greylist");
         if( ! empty($detected) )
         {
-            broadcast_to_moderators("warning", unindent(replace_escaped_objects(
-                $current_module->language->messages->greylist_notification_for_mods, array(
-                '{$user}' => $account->get_processed_display_name(),
-                '{$chat}' => $message->chat_name,
-                '{$link}' => "{$config->full_root_path}/chatroom/" . wp_sanitize_filename($message->chat_name),
-                '{$list}' => implode("</code>, <code>", $detected),
-            ))));
+            $message->contents = str_replace($detected, "beep", $message->contents);
+            // broadcast_to_moderators("warning", unindent(replace_escaped_objects(
+            //     $current_module->language->messages->greylist_notification_for_mods, array(
+            //     '{$user}' => $account->get_processed_display_name(),
+            //     '{$chat}' => $message->chat_name,
+            //     '{$link}' => "{$config->full_root_path}/chatroom/" . wp_sanitize_filename($message->chat_name),
+            //     '{$list}' => implode("</code>, <code>", $detected),
+            // ))));
         }
     }
 }

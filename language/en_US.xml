@@ -313,9 +313,7 @@
                 Enforce usage of moderation black list
             ]]></title>
             <description><![CDATA[
-                When a message contains words found in the moderation module's <b>black</b> list,
-                score a strike to the user and avoid the delivery of the message.<br>
-                When a user scores three strikes, is banned for for one day.
+                Reject a message when contains words found in the moderation module's <b>black</b> list.
             ]]></description>
             <type>boolean</type>
         </specs>
@@ -329,7 +327,7 @@
             ]]></title>
             <description><![CDATA[
                 When a message contains words found in the moderation module's <b>grey</b> list,
-                message is rejected with no further consequences for the sender.
+                they're replaced with a "beep".
             ]]></description>
             <type>boolean</type>
         </specs>
