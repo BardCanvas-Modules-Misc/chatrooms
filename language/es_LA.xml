@@ -113,6 +113,7 @@
         <chat_name_missing>Nombre de chat no proporcionado</chat_name_missing>
         <chat_unexistent>Lo sentimos, pero el chat '%s' no está registrado</chat_unexistent>
         <invalid_timestamp>La semilla de tiempo proporcionada es inválida</invalid_timestamp>
+        <empty_message>Please type a message to send.</empty_message>
         
         <critical_error><![CDATA[
             Ha habido un error al tratar de obtener mensajes:<br>
@@ -172,8 +173,13 @@
                 {$user} ha reportado a {$target} en {$chat}. Por favor checa tu correo o
                 <a href="{$link}">abre el chat</a> para más información.
             ]]></notification>
+            <chat_message><![CDATA[
+                {$user} ha reportado {$target} por mal comportamiento:<br>
+                <span class="critical">{$reason}</span><br>
+                Favor de tomar las medidas pertinentes.
+            ]]></chat_message>
         </user_report_template>
-
+        
         <unban>
             <notification><![CDATA[
                 {$user} le ha restaurado el acceso a {$target} en el chat <a href="{$link}">{$chat}</a>.
@@ -293,9 +299,8 @@
                 ¿Notificar siempre envío de vínculos externos?
             ]]></title>
             <description><![CDATA[
-                De habilitarse, todos los moderadores recibirán notificaciones cuando
-                se envíen vínculos externos en cualquier chat, incluso si el chequeo de vínculos
-                permitidos está desactivado.
+                De habilitarse, todos los moderadores recibirán notificaciones cuando se envíen vínculos externos
+                en cualquier chat, incluso si el chequeo de vínculos permitidos está desactivado.
             ]]></description>
             <type>yes/no</type>
         </specs>
