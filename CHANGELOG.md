@@ -1,6 +1,13 @@
 
 # Chatrooms Module Change Log
 
+## [1.4.0] - 2020-05-15
+
+- Added SQL injection and other checks.
+- Tuned moderation checks.
+- Added support for external chats (imported through the Remote Auth Server).
+- Other minor fixes.
+
 ## [1.3.1] - 2019-04-25
 
 - When there's a single chat and it is shown on the menu, the chat's name is shown instead of the generic caption.
