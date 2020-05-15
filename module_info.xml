@@ -24,7 +24,7 @@
     <extends_to>
         <posts>
             <posts_by_category_index>
-                <after_heading>/extenders/widget_on_category_index.inc</after_heading>
+                <after_heading>extenders/widget_on_category_index.inc</after_heading>
             </posts_by_category_index>
         </posts>
     </extends_to>
