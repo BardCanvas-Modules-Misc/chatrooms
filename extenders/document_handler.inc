@@ -96,7 +96,7 @@ if( ! empty($raw_imports) )
         if( $account_is_remote )
         {
             $token = urlencode(three_layer_encrypt(
-                $account->id_account . "\t" . (time() + (10 * 60)),
+                $account->id_account . "," . (time() + (10 * 60)),
                 $server->auth_server_encryption_key1,
                 $server->auth_server_encryption_key2,
                 $server->auth_server_encryption_key3
