@@ -223,6 +223,24 @@
             <code>{$list}</code>.<br>
             Por favor <a href="{$link}" target="_blank">abre el chat</a> y toma las acciones pertinentes.
         ]]></greylist_notification_for_mods>
+        
+        <rauth_client_disabled><![CDATA[
+            Disculpa, pero este chat está marcado como remoto y el Cliente de Autenticación Remota está desactivado.
+        ]]></rauth_client_disabled>
+        <rauth_client_init_error><![CDATA[
+            Disculpa, pero este chat está marcado como remoto y no se ha podido inicializar el Cliente de Autenticación Remota
+            debido al siguiente error:<br>
+            %e
+        ]]></rauth_client_init_error>
+        <rauth_mapping_error>No se puede mapear tu cuenta local en %s: %s</rauth_mapping_error>
+        <rauth_server_disabled>Disculpa, pero el Servidor de Autenticación Remota está desactivado.</rauth_server_disabled>
+        <rauth_token_missing>Disculpa, pero no se ha recibido un token de sesión.</rauth_token_missing>
+        <rauth_server_init_fail>Disculpa, pero no se puede iniciar la sesión de chat: %s</rauth_server_init_fail>
+        <rauth_invalid_token>Disculpa, pero el token recibido para la sesión de chat es inválido.</rauth_invalid_token>
+        <rauth_invalid_token2>Disculpa, pero el token recibido para la sesión de chat tiene datos inválidos.</rauth_invalid_token2>
+        <rauth_account_not_found>Disculpa, pero tu cuenta no se ha encontrado en este servidor.</rauth_account_not_found>
+        <rauth_account_not_enabled>Disculpa, pero tu cuenta no está activada en este servidor.</rauth_account_not_enabled>
+        <rauth_token_expired>Disculpa, pero el token de sesión ha expirado. Por favor recarga la página para generar uno nuevo.</rauth_token_expired>
     </messages>
     
     <settings_data allow_admin_level="240">
@@ -241,6 +259,21 @@
                 <code>Autores | Sólo para autores | 100</code><br><br>
                 
                 Puedes desactivar temporalmente cualquier salón añadiendo al inicio de su línea un símbolo <code>#</code>.
+            ]]></description>
+            <type>code</type>
+        </specs>
+        
+        <specs key="imported_chats" required_modules="rauth_client" highlight_class="sensitive">
+            <title>Chats importados</title>
+            <description><![CDATA[
+                <span class="alternate">
+                    El módulo de Autorización Remota está activo!
+                </span><br>
+                Si deseas usar chats del Servidor de Autorización Remota,
+                asegúrate de incluírlos en el registro anterior y escribe
+                los nombres aquí, uno por línea.<br>
+                <span class="critical">Importante:</span> asegúrate de escribir los nombres de los chats
+                <u>exactamente</u> como se definieron en el Servidor Remoto.
             ]]></description>
             <type>code</type>
         </specs>

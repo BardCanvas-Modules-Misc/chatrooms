@@ -223,6 +223,24 @@
             <code>{$list}</code>.<br>
             Please <a href="{$link}" target="_blank">open the chat</a> and take the proper measures.
         ]]></greylist_notification_for_mods>
+        
+        <rauth_client_disabled><![CDATA[
+            Sorry, but this chat is marked as remote and the Remote Authentication Client module is disabled.
+        ]]></rauth_client_disabled>
+        <rauth_client_init_error><![CDATA[
+            Sorry, but this chat is marked as remote and failed to initialize Remote Authentication Client instance
+            due to the next error:<br>
+            %e
+        ]]></rauth_client_init_error>
+        <rauth_mapping_error>Cannot map your local account on %s: %s</rauth_mapping_error>
+        <rauth_server_disabled>Sorry, but the Remote Authentication Server is disabled.</rauth_server_disabled>
+        <rauth_token_missing>Sorry, but no session token has been provided.</rauth_token_missing>
+        <rauth_server_init_fail>Sorry, but cannot initialize chat session: %s</rauth_server_init_fail>
+        <rauth_invalid_token>Sorry, but the token received for the chat session is invalid.</rauth_invalid_token>
+        <rauth_invalid_token2>Sorry, but the token received for the chat session has invalid data.</rauth_invalid_token2>
+        <rauth_account_not_found>Sorry, but your account hasn't been found on this server.</rauth_account_not_found>
+        <rauth_account_not_enabled>Sorry, but your account isn't enabled on this server.</rauth_account_not_enabled>
+        <rauth_token_expired>Sorry, but your session token has expired. Please reload the page to issue a new token.</rauth_token_expired>
     </messages>
     
     <settings_data allow_admin_level="240">
@@ -241,6 +259,21 @@
                 <code>Authors | Only for authors | 100</code><br><br>
                 
                 You can temporarily disable any room by prepending its line with a <code>#</code>.
+            ]]></description>
+            <type>code</type>
+        </specs>
+        
+        <specs key="imported_chats" required_modules="rauth_client" highlight_class="sensitive">
+            <title>Imported chats</title>
+            <description><![CDATA[
+                <span class="alternate">
+                    The Remote Auth Client module has been detected!
+                </span><br>
+                If you want to use chats from the Remote Auth server,
+                make sure to include them in the registry above and
+                type the names here, one per line.<br>
+                <span class="critical">Important:</span> make sure to type the chatroom names
+                <u>exactly</u> as they are on the Remote Auth server.
             ]]></description>
             <type>code</type>
         </specs>

@@ -22,6 +22,17 @@ $this_module = $current_module;
 
 <link rel="stylesheet" type="text/css" href="<?= $this_module->get_url() ?>/media/styles~v<?= time() ?>.css">
 
+<? if( $_GET["embedded"] == "true" ): ?>
+    <style type="text/css">
+        body, body.popup { padding: 0; background-color: white !important; }
+        #body_wrapper { background-color: white !important; }
+    </style>
+<? endif; ?>
+
+<style type="text/css">
+    body { overflow: hidden; }
+</style>
+
 <script type="text/javascript">
     $_CHATROOM_SCRIPT  = '<?= $this_module->get_url() ?>/api/get_messages.php';
     $_CHATROOM_SENDER  = '<?= $this_module->get_url() ?>/api/post_message.php';
@@ -33,6 +44,11 @@ $this_module = $current_module;
      data-params='{"chat": "<?= $current_chat->name ?>"}'
      data-hide-self-details="true">
     <div class="chat_title aligncenter">
+        <? if( $_GET["embedded"] == "true" ): ?>
+            <a class="pull-right" href="<?= $config->full_root_path ?>/chatroom/<?= wp_sanitize_filename($current_chat->name) ?>"
+               target="_blank" style="color: white !important;"><i class="fa fa-window-maximize fa-fw"></i></a>
+        <? endif; ?>
+        
         <?= $settings->get("engine.website_name") ?>
         
         <span class="user_display_name" data-user-level="<?= $account->level ?>">

@@ -11,8 +11,9 @@
 
 use hng2_base\module;
 use hng2_modules\chatrooms\chatroom_messages_repository;
+use hng2_modules\rauth_client\server;
 
-global $settings, $category, $account;
+global $settings, $category, $account, $modules;
 
 $raw_category_chats = $settings->get("modules:chatrooms.on_category_chats");
 if( empty($raw_category_chats) ) return;
@@ -56,6 +57,116 @@ if( ! isset($category_chats[$category->slug]) ) return;
 
 $current_chat = $category_chats[$category->slug];
 if( $account->level < $chats_registry[$current_chat]->level ) return;
+
+$raw_imports = $settings->get("modules:chatrooms.imported_chats");
+if( ! empty($raw_imports) )
+{
+    $imported_chats = array();
+    foreach( explode("\n", $raw_imports) as $line )
+    {
+        $line = trim($line);
+        if( empty($line) ) continue;
+        if( substr($line, 0, 1) == "#" ) continue;
+        
+        $imported_chats[] = $line;
+    }
+    
+    if( ! empty($imported_chats) && in_array($current_chat, $imported_chats) )
+    {
+        if( ! $modules["rauth_client"]->enabled )
+        {
+            echo "
+                <div class='content_frame framed_content state_ko aligncenter'
+                     style='font-size: 1.2em; line-height: normal; padding: 20px;'>
+                     <i class='fa fa-warning'></i>
+                     {$this_module->language->messages->rauth_client_disabled}
+                </div>
+            ";
+            
+            return;
+        }
+        
+        try
+        {
+            $server = new server();
+        }
+        catch(\Exception $e)
+        {
+            $message = sprintf($this_module->language->messages->rauth_client_init_error, $e->getMessage());
+            echo "
+                <div class='content_frame framed_content state_ko aligncenter'
+                     style='font-size: 1.2em; line-height: normal; padding: 20px;'>
+                     <i class='fa fa-warning'></i>
+                     $message
+                </div>
+            ";
+            
+            return;
+        }
+        
+        $account_is_remote = true;
+        try
+        {
+            $res = $server->get_account($account->user_name, $account->password);
+        }
+        catch(\Exception $e)
+        {
+            $account_is_remote = false;
+        }
+        
+        if( $account_is_remote )
+        {
+            $token = urlencode(three_layer_encrypt(
+                $account->id_account . "," . (time() + (10 * 60)),
+                $server->auth_server_encryption_key1,
+                $server->auth_server_encryption_key2,
+                $server->auth_server_encryption_key3
+            ));
+        }
+        elseif( $server->is_local_account_mapped_remotely($account) )
+        {
+            $token = urlencode($server->tokenize_mapped_account_id($account, 10));
+        }
+        else
+        {
+            try
+            {
+                $xaccount = $server->map_local_account($account);
+            }
+            catch(\Exception $e)
+            {
+                $message = sprintf(
+                    $this_module->language->messages->rauth_mapping_error, $server->auth_server_title, $e->getMessage()
+                );
+                echo "
+                    <div class='content_frame framed_content state_ko aligncenter'
+                         style='font-size: 1.2em; line-height: normal; padding: 20px;'>
+                         <i class='fa fa-warning'></i>
+                         $message
+                    </div>
+                ";
+                
+                return;
+            }
+            
+            $token = urlencode($server->tokenize_mapped_account_id($xaccount, 10));
+        }
+        
+        $link = "{$server->auth_server_url}/chatroom/" . wp_sanitize_filename($current_chat) . "?wsh={$server->auth_website_handle}&token={$token}&embedded=true";
+        ?>
+        
+        <div class="content_frame" style="padding: 0; background-color: white;">
+            <iframe id="embedded_chatroom" src="<?= $link ?>"
+                    frameborder="0" width="100%"
+                    scrollbars="none" allowtransparency="false"
+                    style="height: 40vh; min-height: 200px; background-color: white; margin-bottom: -3px"></iframe>
+        </div>
+        
+        <?
+        
+        return;
+    }
+}
 
 if( preg_match("/ios|android|phone|mobile/i", $_SERVER["HTTP_USER_AGENT"]) )
 {
