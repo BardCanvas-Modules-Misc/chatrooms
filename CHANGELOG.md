@@ -1,6 +1,10 @@
 
 # Chatrooms Module Change Log
 
+## [1.4.1] - 2020-05-15
+
+- Fixed wrong token forging.
+
 ## [1.4.0] - 2020-05-15
 
 - Added SQL injection and other checks.
