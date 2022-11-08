@@ -281,7 +281,7 @@ var chatroom = {
                 chatroom.__readjust();
             })
             .change(function(e) {
-                chatroom.__readjust();
+                setTimeout(function() { chatroom.__readjust() }, 100);
             })
             .keypress(function(e) {
                 if( e.keyCode === 13 && ! e.shiftKey ) {
@@ -516,19 +516,12 @@ var chatroom = {
     {
         var $messages = chatroom.$container.find('.target .messages');
         var $input    = chatroom.$container.find('.target .input');
+        $input.trigger('change');
         
-        if( typeof $input.attr('data-height') === 'undefined' )
-            $input.attr('data-height', 0);
-        
-        var previousHeight = parseInt($input.attr('data-height'));
         var currentHeight  = $input.height() + 2;
-        
-        if( currentHeight !== previousHeight )
-        {
-            $messages.css('height', 'calc(100% - ' + currentHeight + 'px)');
-            $messages.css('margin-bottom',           currentHeight + 'px');
-            $input.attr('data-height', currentHeight);
-        }
+        $messages.css('height', 'calc(100% - ' + currentHeight + 'px)');
+        $messages.css('margin-bottom',           currentHeight + 'px');
+        $input.attr('data-height', currentHeight);
     },
     
     __sendMessage: function()
@@ -576,6 +569,7 @@ var chatroom = {
             }
             
             $textarea.val('');
+            $textarea.trigger('change');
             $textarea.closest('.input').unblock();
             chatroom.run();
         };
