@@ -182,7 +182,7 @@ var chatroom = {
     {
         $('#chatroom_ban_form').ajaxForm({
             target: '#chatroom_ban_target',
-            beforeSubmit: function(formData, $form, options)
+            beforeSubmit: function(formData, $form)
             {
                 $form.closest('.ui-dialog').block(blockUI_medium_params);
             },
@@ -491,7 +491,7 @@ var chatroom = {
         return $item;
     },
     
-    runFailed: function($xhr, textStatus, errorThrown)
+    runFailed: function($xhr)
     {
         if( parseInt($xhr.status) ===   0 ) return;
         if( parseInt($xhr.status) === 200 ) return;
@@ -574,7 +574,7 @@ var chatroom = {
             chatroom.run();
         };
         
-        var error = function($xhr, textStatus, errorThrown) {
+        var error = function($xhr) {
             
             if( parseInt($xhr.status) ===   0 ) return;
             if( parseInt($xhr.status) === 200 ) return;
@@ -603,11 +603,11 @@ var chatroom = {
         {
             $form.ajaxForm({
                 target: '#chatroom_image_target',
-                beforeSubmit: function(formData, $form, options)
+                beforeSubmit: function()
                 {
                     chatroom.$container.find('.target .input').block(blockUI_smallest_params);
                 },
-                success: function(responseText, statusText, xhr, $form)
+                success: function(responseText)
                 {
                     chatroom.$container.find('.target .input').unblock();
                     
@@ -672,7 +672,6 @@ var chatroom = {
         var $submenu     = $trigger.closest('.dropdown_menu');
         var message_id   = $submenu.attr('data-message-id');
         var author_id    = $submenu.attr('data-user-id');
-        var author_lvl   = $submenu.attr('data-user-level');
         var author_uname = $submenu.attr('data-user-name');
         
         if( action === 'view_profile' )
