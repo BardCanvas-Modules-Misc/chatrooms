@@ -1,6 +1,10 @@
 
 # Chatrooms Module Change Log
 
+## [1.4.2] - 2022-11-08
+
+- Fixed issue with textarea resizing.
+
 ## [1.4.1] - 2020-05-15
 
 - Fixed wrong token forging.
